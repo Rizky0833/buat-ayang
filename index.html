@@ -2667,6 +2667,10 @@
                 }, 50);
             } else {
                 clearInterval(fadeInterval);
+                // Jika baru pertama kali diputar (currentTime masih 0), lewati intro 15 detik langsung ke bagian vokal/nyanyian utama
+                if (audio.currentTime === 0) {
+                    audio.currentTime = 15;
+                }
                 audio.volume = 0; // Mulai dari volume 0 (sunyi)
                 audio.play()
                     .then(() => {
