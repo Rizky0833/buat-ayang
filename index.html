@@ -2130,6 +2130,7 @@
         }
 
         function passQuiz() {
+            goFullscreen(); // Memastikan layar penuh tetap aktif secara stabil saat masuk ke kejutan utama
             document.getElementById('quizPage').style.display = 'none';
             const rp = document.getElementById('revealPage');
             rp.style.display = 'block';
@@ -2477,6 +2478,20 @@
             });
         }
 
+        /* ===== FULLSCREEN HELPER ===== */
+        function goFullscreen() {
+            const doc = document.documentElement;
+            if (doc.requestFullscreen) {
+                doc.requestFullscreen().catch(err => console.log("Fullscreen blocked:", err));
+            } else if (doc.mozRequestFullScreen) { /* Firefox */
+                doc.mozRequestFullScreen().catch(err => console.log("Fullscreen blocked:", err));
+            } else if (doc.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+                doc.webkitRequestFullscreen().catch(err => console.log("Fullscreen blocked:", err));
+            } else if (doc.msRequestFullscreen) { /* IE/Edge */
+                doc.msRequestFullscreen().catch(err => console.log("Fullscreen blocked:", err));
+            }
+        }
+
         /* ===== CANDLE BLOW LOGIC ===== */
         let audioCtx = null;
         let analyser = null;
@@ -2484,6 +2499,7 @@
         let blowLoop = null;
 
         function openCandle() {
+            goFullscreen(); // Memicu Layar Penuh (Fullscreen) secara elegan untuk menyembunyikan bilah alamat (URL) atas
             document.getElementById('celeb').classList.remove('on');
             document.getElementById('cdPage').style.display = 'none';
             document.getElementById('candlePage').style.display = 'flex';
