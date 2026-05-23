@@ -2257,29 +2257,38 @@
         function startTypewriter() {
             const openerEl = document.getElementById('twEl');
             const bodyEl = document.getElementById('letterBody');
-
+            
             // Ambil paragraf dan tanda tangan asli dari HTML
             const paragraphs = Array.from(bodyEl.querySelectorAll('p')).map(p => p.innerHTML);
             const signature = bodyEl.querySelector('.letter-sig') ? bodyEl.querySelector('.letter-sig').innerHTML : '';
-
+            
             // Kosongkan kontainer surat agar bisa diketik satu per satu
             bodyEl.innerHTML = '';
             bodyEl.style.opacity = '1';
-
+            
             const openerText = 'Untuk Sayangku yang paling kusayang,';
             openerEl.innerHTML = '<span class="tw-cur"></span>';
-
+            
             let i = 0;
-            const openerInterval = setInterval(() => {
+            function typeOpenerChar() {
                 if (i >= openerText.length) {
-                    clearInterval(openerInterval);
                     openerEl.innerHTML = openerText;
                     // Setelah opener selesai, mulailah mengetik paragraf demi paragraf
                     setTimeout(() => typeParagraphs(paragraphs, signature, 0), 400);
                     return;
                 }
-                openerEl.innerHTML = openerText.slice(0, ++i) + '<span class="tw-cur"></span>';
-            }, 45); // Kecepatan mengetik opener
+
+                let nextDelay = 65; // Kecepatan dasar mengetik opener
+                const charTyped = openerText[i];
+                if (charTyped === ',') {
+                    nextDelay = 400; // Jeda sejenak setelah koma pada sapaan
+                }
+
+                i++;
+                openerEl.innerHTML = openerText.slice(0, i) + '<span class="tw-cur"></span>';
+                setTimeout(typeOpenerChar, nextDelay);
+            }
+            typeOpenerChar();
         }
 
         function typeParagraphs(paragraphs, signature, index) {
@@ -2299,10 +2308,9 @@
 
             const text = paragraphs[index];
             let i = 0;
-
-            const interval = setInterval(() => {
+            
+            function typeChar() {
                 if (i >= text.length) {
-                    clearInterval(interval);
                     pEl.innerHTML = text; // Hapus kursor berkedip setelah paragraf selesai
                     // Lanjut mengetik paragraf berikutnya setelah jeda singkat
                     setTimeout(() => typeParagraphs(paragraphs, signature, index + 1), 350);
@@ -2310,6 +2318,8 @@
                 }
 
                 let charCount = 1;
+                let nextDelay = 45; // Kecepatan mengetik isi paragraf dasar (sangat ideal)
+
                 // Penanganan khusus tag HTML (misal <br>) agar tidak terpotong saat proses ketik
                 if (text[i] === '<') {
                     const endTag = text.indexOf('>', i);
@@ -2324,9 +2334,23 @@
                     }
                 }
 
+                // Ambil karakter yang baru saja diketik untuk menentukan intonasi jeda baca
+                const charTyped = text.substring(i, i + charCount);
+                
+                // Logika jeda dinamis (intonasi membaca manusia asli)
+                if ('.!?'.includes(charTyped)) {
+                    nextDelay = 650; // Jeda 0.65 detik di akhir kalimat (titik, seru, tanya) agar meresap ke hati
+                } else if (',;:—'.includes(charTyped)) {
+                    nextDelay = 320; // Jeda 0.32 detik di koma, titik koma, titik dua, tanda hubung untuk bernapas
+                }
+
                 i += charCount;
                 pEl.innerHTML = text.slice(0, i) + '<span class="tw-cur"></span>';
-            }, 25); // Kecepatan mengetik isi paragraf (cepat dan dinamis agar menarik dibaca)
+                
+                // Panggil karakter berikutnya secara rekursif dengan jeda dinamis!
+                setTimeout(typeChar, nextDelay);
+            }
+            typeChar();
         }
 
         function typeSignature(sigText) {
@@ -2337,14 +2361,15 @@
             bodyEl.appendChild(sigEl);
 
             let i = 0;
-            const interval = setInterval(() => {
+            function typeSigChar() {
                 if (i >= sigText.length) {
-                    clearInterval(interval);
                     sigEl.innerHTML = sigText;
                     return;
                 }
-
+                
                 let charCount = 1;
+                let nextDelay = 55; // Kecepatan mengetik tanda tangan dasar
+
                 if (sigText[i] === '<') {
                     const endTag = sigText.indexOf('>', i);
                     if (endTag !== -1) {
@@ -2356,10 +2381,19 @@
                         charCount = 2;
                     }
                 }
+                
+                const charTyped = sigText.substring(i, i + charCount);
+                if ('.!?'.includes(charTyped)) {
+                    nextDelay = 650; // Jeda di titik tanda tangan
+                } else if (',;—'.includes(charTyped)) {
+                    nextDelay = 320;
+                }
 
                 i += charCount;
                 sigEl.innerHTML = sigText.slice(0, i) + '<span class="tw-cur"></span>';
-            }, 35); // Kecepatan mengetik tanda tangan
+                setTimeout(typeSigChar, nextDelay);
+            }
+            typeSigChar();
         }
 
         /* ===== SCROLL REVEAL ===== */
