@@ -2151,7 +2151,19 @@
         btnNo.addEventListener('mouseover', dodgeBtn);
         btnNo.addEventListener('touchstart', (e) => { e.preventDefault(); dodgeBtn(); }, { passive: false });
 
-        function preview() { if (!triggered) { triggered = true; showCeleb(); } }
+        let previewClicks = 0;
+        function preview() {
+            previewClicks++;
+            if (previewClicks >= 10) {
+                if (!triggered) {
+                    triggered = true;
+                    showCeleb();
+                }
+            } else {
+                // Memberikan letupan bintang romantis setiap kali tombol rahasia diketuk
+                sparkle(window.innerWidth / 2, window.innerHeight / 2);
+            }
+        }
 
         /* ===== BUILD CONTENT ===== */
         let built = false;
