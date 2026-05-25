@@ -1728,7 +1728,7 @@
 
     <canvas id="particleCanvas"></canvas>
     <div id="scrollBar"></div>
-    <button id="musicBtn" onclick="toggleMusic()">🎵</button>
+    <button id="musicBtn">🎵</button>
     <audio id="bgMusic" loop src="lagu-spesial.mp3"></audio>
 
     <!-- ======= COUNTDOWN PAGE ======= -->
@@ -1774,7 +1774,7 @@
         <p class="lock-txt"><span>🔒</span>Tersembunyi sampai 26 Mei</p>
     </div>
 
-    <button id="prevBtn" onclick="preview()">✦</button>
+    <button id="prevBtn" style="display: none;">✦</button>
 
     <!-- CELEBRATION -->
     <div id="celeb">
@@ -1782,7 +1782,7 @@
         <div class="cel-title">Happy Birthday</div>
         <div class="cel-sub">Sayang tersayangku ♡</div>
         <div class="cel-hearts">💗 💖 💗 💖 💗</div>
-        <button class="cel-btn" onclick="openCandle()">Aku mau lihat ♡</button>
+        <button class="cel-btn" id="celBtn">Aku mau lihat ♡</button>
     </div>
 
     <!-- CANDLE PAGE -->
@@ -1805,13 +1805,13 @@
         <div class="quiz-title">Eits, tunggu dulu... 🤭</div>
         <div class="quiz-q">Sebelum lanjut, aku mau tanya... Kamu kangen nggak sama aku? 💕</div>
         <div class="quiz-btns">
-            <button class="q-btn yes" onclick="passQuiz()">Kangen Banget!</button>
+            <button class="q-btn yes" id="btnYes">Kangen Banget!</button>
             <button class="q-btn no" id="btnNo">Biasa Aja</button>
         </div>
     </div>
 
     <!-- LIGHTBOX -->
-    <div id="lb" onclick="closeLb()"><button id="lbX" onclick="closeLb()">✕</button><img id="lbImg" src="" alt=""></div>
+    <div id="lb"><button id="lbX">✕</button><img id="lbImg" src="" alt=""></div>
 
     <!-- ======= REVEAL PAGE ======= -->
     <div id="revealPage" style="display:none" class="page">
@@ -1885,9 +1885,9 @@
                     <div class="carousel-track" id="carouselTrack"></div>
                 </div>
                 <div class="carousel-nav">
-                    <button class="c-btn" onclick="carouselMove(-1)">‹</button>
+                    <button class="c-btn" id="prevSlide">‹</button>
                     <div class="c-dots" id="cDots"></div>
-                    <button class="c-btn" onclick="carouselMove(1)">›</button>
+                    <button class="c-btn" id="nextSlide">›</button>
                 </div>
             </div>
         </div>
@@ -1937,7 +1937,7 @@
         <div class="sec reveal delay1">
             <div class="sec-t">🤗 Pelukan Virtual</div>
             <div class="card hug-section">
-                <button class="hug-btn" id="hugBtn" onclick="doHug()">🤗</button>
+                <button class="hug-btn" id="hugBtn">🤗</button>
                 <div class="hug-text" id="hugText">Tap untuk pelukan dari aku 🌸</div>
                 <div class="hug-counter" id="hugCount"></div>
             </div>
@@ -1967,742 +1967,895 @@
         </div>
     </div>
 
-    <button id="fab" onclick="launchConfetti()">🎊</button>
+    <button id="fab">🎊</button>
 
     <script>
-        /* ============================================================
-           CONFIG — edit bagian ini sebelum kirim ke pacar!
-        ============================================================ */
-        const PHOTOS = [
-            { src: "Foto/4b58bd8382f35bca2d0fa03ad756cd11.jpg", caption: "Foto Imutnya aku 🌸" },
-            { src: "Foto/IMG_2866.png", caption: "Foto Gemesnya aku 🥰" },
-            { src: "Foto/temp_image_01A8915A-3436-4238-A596-CF1DE14EF955.webp", caption: "Foto Seriusnya ayangku 🤫" },
-            { src: "Foto/temp_image_1ACC9679-DC9B-4558-85DE-D4C6E092B64B.webp", caption: "Foto Ngambeknya aku 🥺" },
-            { src: "Foto/temp_image_8A187156-4892-4EBC-AB8D-AE6B1393C359.webp", caption: "Foto Nyebelinnya aku 😜" },
-            { src: "Foto/temp_image_EB4BDAD0-4EBA-475D-A0B6-97487333E57C.webp", caption: "Foto Lope Sekebonnya aku 💖" },
-        ];
+        (() => {
+            /* ============================================================
+               CONFIG — edit bagian ini sebelum kirim ke pacar!
+            ============================================================ */
+            const PHOTOS = [
+                { src: "Foto/4b58bd8382f35bca2d0fa03ad756cd11.jpg", caption: "Foto Imutnya aku 🌸" },
+                { src: "Foto/IMG_2866.png", caption: "Foto Gemesnya aku 🥰" },
+                { src: "Foto/temp_image_01A8915A-3436-4238-A596-CF1DE14EF955.webp", caption: "Foto Seriusnya ayangku 🤫" },
+                { src: "Foto/temp_image_1ACC9679-DC9B-4558-85DE-D4C6E092B64B.webp", caption: "Foto Ngambeknya aku 🥺" },
+                { src: "Foto/temp_image_8A187156-4892-4EBC-AB8D-AE6B1393C359.webp", caption: "Foto Nyebelinnya aku 😜" },
+                { src: "Foto/temp_image_EB4BDAD0-4EBA-475D-A0B6-97487333E57C.webp", caption: "Foto Lope Sekebonnya aku 💖" },
+            ];
 
-        const REASONS = [
-            { emoji: "🌟", text: "Senyummu yang bisa bikin hari apapun jadi lebih cerah" },
-            { emoji: "💬", text: "Cara kamu dengerin aku — selalu sabar, selalu ada" },
-            { emoji: "😂", text: "Kamu bikin aku ketawa bahkan di hari terburuk sekalipun" },
-            { emoji: "🌙", text: "Good night texts-mu yang selalu bikin aku tidur lebih tenang" },
-            { emoji: "💪", text: "Kamu kuat banget — aku kagum sama semangat kamu" },
-            { emoji: "🎯", text: "Semangat kamu dalam ngejar impian bikin aku ikut termotivasi" },
-            { emoji: "🌸", text: "Cara kamu peduli sama orang-orang di sekitar kamu" },
-            { emoji: "🤝", text: "Kamu selalu jujur sama aku, apapun situasinya" },
-            { emoji: "☀️", text: "Kehadiranmu aja udah cukup bikin hari terasa lebih hangat" },
-            { emoji: "♾️", text: "Dan satu juta alasan lain yang terlalu banyak buat ditulis" },
-        ];
+            const REASONS = [
+                { emoji: "🌟", text: "Senyummu yang bisa bikin hari apapun jadi lebih cerah" },
+                { emoji: "💬", text: "Cara kamu dengerin aku — selalu sabar, selalu ada" },
+                { emoji: "😂", text: "Kamu bikin aku ketawa bahkan di hari terburuk sekalipun" },
+                { emoji: "🌙", text: "Good night texts-mu yang selalu bikin aku tidur lebih tenang" },
+                { emoji: "💪", text: "Kamu kuat banget — aku kagum sama semangat kamu" },
+                { emoji: "🎯", text: "Semangat kamu dalam ngejar impian bikin aku ikut termotivasi" },
+                { emoji: "🌸", text: "Cara kamu peduli sama orang-orang di sekitar kamu" },
+                { emoji: "🤝", text: "Kamu selalu jujur sama aku, apapun situasinya" },
+                { emoji: "☀️", text: "Kehadiranmu aja udah cukup bikin hari terasa lebih hangat" },
+                { emoji: "♾️", text: "Dan satu juta alasan lain yang terlalu banyak buat ditulis" },
+            ];
 
-        const TIMELINE = [
-            { date: "Awal mula", emoji: "🎮", title: "Kita pertama ketemu", desc: "Entah gimana caranya, kita bisa saling ketemu di antara jutaan orang di dunia ini dan jutaan player Roblox lainnya... 😆" },
-            { date: "Setelah itu", emoji: "💬", title: "Mulai saling kenal", desc: "Obrolan pertama yang terasa biasa, tapi ternyata jadi awal dari sesuatu yang luar biasa." },
-            { date: "Perlahan", emoji: "💗", title: "Makin dekat", desc: "Tanpa sadar, kamu udah jadi bagian yang paling aku tunggu tiap harinya." },
-            { date: "26 Mei", emoji: "🎂", title: "Hari Ulang Tahunmu", desc: "Dan hari ini, aku cuma mau bilang: makasih udah lahir ke dunia 🌷" },
-        ];
-        /* ============================================================ */
+            const TIMELINE = [
+                { date: "Awal mula", emoji: "🎮", title: "Kita pertama ketemu", desc: "Entah gimana caranya, kita bisa saling ketemu di antara jutaan orang di dunia ini dan jutaan player Roblox lainnya... 😆" },
+                { date: "Setelah itu", emoji: "💬", title: "Mulai saling kenal", desc: "Obrolan pertama yang terasa biasa, tapi ternyata jadi awal dari sesuatu yang luar biasa." },
+                { date: "Perlahan", emoji: "💗", title: "Makin dekat", desc: "Tanpa sadar, kamu udah jadi bagian yang paling aku tunggu tiap harinya." },
+                { date: "26 Mei", emoji: "🎂", title: "Hari Ulang Tahunmu", desc: "Dan hari ini, aku cuma mau bilang: makasih udah lahir ke dunia 🌷" },
+            ];
+            /* ============================================================ */
 
-        /* ===== ANTI-INSPECT ===== */
-        document.addEventListener('contextmenu', e => e.preventDefault());
-        document.addEventListener('selectstart', e => e.preventDefault());
-        document.addEventListener('dragstart', e => e.preventDefault());
-        document.addEventListener('copy', e => e.preventDefault());
-        document.addEventListener('keydown', e => {
-            const k = e.key.toLowerCase();
-            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && 'ijck'.includes(k)) || (e.ctrlKey && 'usap'.includes(k)) || (e.metaKey && e.altKey && 'ij'.includes(k)) || (e.metaKey && 'usap'.includes(k))) { e.preventDefault(); e.stopPropagation(); return false; }
-        });
-
-        /* ===== CUSTOM CURSOR ===== */
-        const cur = document.getElementById('cur');
-        const curEmojis = ['💗', '💖', '✨', '🌸', '💕']; let ci = 0;
-        let mx = 0, my = 0;
-        document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cur.style.left = mx + 'px'; cur.style.top = my + 'px'; });
-        document.addEventListener('click', () => { ci = (ci + 1) % curEmojis.length; cur.textContent = curEmojis[ci]; });
-
-        /* ===== SPARKLE ===== */
-        const spE = ['✨', '💗', '🌸', '⭐', '💖', '🩷', '🌟'];
-        function sparkle(x, y) {
-            for (let i = 0; i < 4; i++) {
-                const el = document.createElement('div'); el.className = 'sp';
-                el.textContent = spE[Math.floor(Math.random() * spE.length)];
-                const a = Math.random() * 360, d = 28 + Math.random() * 38;
-                el.style.cssText = `left:${x}px;top:${y}px;--dx:${Math.cos(a * Math.PI / 180) * d}px;--dy:${Math.sin(a * Math.PI / 180) * d}px;animation-delay:${i * 55}ms;font-size:${12 + Math.random() * 8}px`;
-                document.body.appendChild(el); setTimeout(() => el.remove(), 750);
-            }
-        }
-        document.addEventListener('click', e => sparkle(e.clientX, e.clientY));
-        document.addEventListener('touchstart', e => { const t = e.touches[0]; sparkle(t.clientX, t.clientY); }, { passive: true });
-
-        /* ===== CANVAS PARTICLES ===== */
-        const canvas = document.getElementById('particleCanvas');
-        const ctx = canvas.getContext('2d');
-        const pEmojis = ['💗', '💖', '💕', '🌸', '✨', '💝', '🩷'];
-        let particles = [];
-
-        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas, { passive: true });
-
-        class Particle {
-            constructor() { this.reset(true) }
-            reset(init = false) {
-                this.x = Math.random() * canvas.width;
-                this.y = init ? Math.random() * canvas.height : canvas.height + 20;
-                this.size = 11 + Math.random() * 12;
-                this.speed = 0.4 + Math.random() * 0.7;
-                this.drift = (Math.random() - .5) * 0.4;
-                this.rot = Math.random() * 360;
-                this.rotSpeed = (Math.random() - .5) * 1.2;
-                this.alpha = 0.3 + Math.random() * .4;
-                this.emoji = pEmojis[Math.floor(Math.random() * pEmojis.length)];
-            }
-            update() {
-                this.y -= this.speed; this.x += this.drift; this.rot += this.rotSpeed;
-                if (this.y < -30) this.reset();
-            }
-            draw() {
-                ctx.save(); ctx.globalAlpha = this.alpha;
-                ctx.font = this.size + 'px serif';
-                ctx.translate(this.x, this.y); ctx.rotate(this.rot * Math.PI / 180);
-                ctx.fillText(this.emoji, -this.size / 2, -this.size / 2);
-                ctx.restore();
-            }
-        }
-
-        // Only 18 particles — lightweight
-        for (let i = 0; i < 18; i++)particles.push(new Particle());
-
-        let animRunning = true;
-        function animLoop() {
-            if (!animRunning) return;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => { p.update(); p.draw(); });
-            requestAnimationFrame(animLoop);
-        }
-        animLoop();
-
-        /* ===== INTRO ===== */
-        setTimeout(() => {
-            document.getElementById('intro').classList.add('out');
-            setTimeout(() => document.getElementById('intro').remove(), 1000);
-        }, 2300);
-
-        /* ===== COUNTDOWN ===== */
-        let triggered = false;
-        function isBday() { const n = new Date(); return n.getMonth() === 4 && n.getDate() === 26; }
-        function updateCd() {
-            const now = new Date();
-            if (isBday()) {
-                ['days', 'hours', 'minutes', 'seconds'].forEach(id => setN(id, '00'));
-                document.getElementById('cdMsg').textContent = '🎉 Hari ini harinya!! 🎂';
-                if (!triggered) { triggered = true; setTimeout(showCeleb, 700); }
-                return;
-            }
-            const todayMid = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-            const bdayMid = new Date(now.getFullYear(), 4, 26);
-            const calDays = Math.round((bdayMid - todayMid) / 86400000);
-            const diff = bdayMid - now;
-            const h = Math.floor((diff % 86400000) / 3600000);
-            const m = Math.floor((diff % 3600000) / 60000);
-            const s = Math.floor((diff % 60000) / 1000);
-            setN('days', pad(calDays)); setN('hours', pad(h)); setN('minutes', pad(m)); setNpop('seconds', pad(s));
-            document.getElementById('cdMsg').textContent =
-                calDays === 1 ? '✨ Besok!! Hampir tiba, nggak sabar~' :
-                    calDays <= 7 ? `🌸 Tinggal ${calDays} hari lagi... hampir~` :
-                        `🌷 Masih ${calDays} hari lagi, tapi udah ditunggu dari sekarang`;
-        }
-        function pad(n) { return String(n).padStart(2, '0') }
-        function setN(id, v) { document.getElementById(id).textContent = v }
-        function setNpop(id, v) {
-            const el = document.getElementById(id);
-            if (el.textContent !== v) { el.textContent = v; el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop'); setTimeout(() => el.classList.remove('pop'), 240); }
-        }
-        setInterval(updateCd, 1000); updateCd();
-
-        /* ===== CELEBRATE ===== */
-        function showCeleb() { document.getElementById('celeb').classList.add('on'); massConfetti(); }
-        function openQuiz() {
-            document.getElementById('celeb').classList.remove('on');
-            document.getElementById('cdPage').style.display = 'none';
-            document.getElementById('quizPage').style.display = 'flex';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function passQuiz() {
-            goFullscreen(); // Memastikan layar penuh tetap aktif secara stabil saat masuk ke kejutan utama
-            document.getElementById('quizPage').style.display = 'none';
-            const rp = document.getElementById('revealPage');
-            rp.style.display = 'block';
-            document.getElementById('fab').style.display = 'flex';
-            document.getElementById('scrollBar').style.display = 'block';
-            launchConfetti(); window.scrollTo({ top: 0, behavior: 'smooth' });
-            buildAll();
-            setTimeout(startTypewriter, 500);
-            initScrollReveal();
-        }
-
-        /* QUIZ NO BUTTON DODGE LOGIC */
-        const btnNo = document.getElementById('btnNo');
-        function dodgeBtn() {
-            const rx = Math.floor(Math.random() * 200) - 100;
-            const ry = Math.floor(Math.random() * 150) - 50;
-            btnNo.style.transform = `translate(calc(-50% + ${rx}px), ${ry}px)`;
-        }
-        btnNo.addEventListener('mouseover', dodgeBtn);
-        btnNo.addEventListener('touchstart', (e) => { e.preventDefault(); dodgeBtn(); }, { passive: false });
-
-        let previewClicks = 0;
-        function preview() {
-            previewClicks++;
-            if (previewClicks >= 10) {
-                if (!triggered) {
-                    triggered = true;
-                    showCeleb();
-                }
-            } else {
-                // Memberikan letupan bintang romantis setiap kali tombol rahasia diketuk
-                sparkle(window.innerWidth / 2, window.innerHeight / 2);
-            }
-        }
-
-        /* ===== BUILD CONTENT ===== */
-        let built = false;
-        function buildAll() {
-            if (built) return; built = true;
-            buildFlipCards();
-            buildCarousel();
-            buildTimeline();
-        }
-
-        /* FLIP CARDS */
-        function buildFlipCards() {
-            const grid = document.getElementById('flipGrid');
-            REASONS.forEach((r, i) => {
-                const card = document.createElement('div'); card.className = 'flip-card';
-                card.innerHTML = `<div class="flip-inner">
-      <div class="flip-front"><span class="flip-num">${r.emoji}</span><span class="flip-hint">Alasan #${i + 1}</span></div>
-      <div class="flip-back"><span class="flip-reason">${r.text}</span></div>
-    </div>`;
-                card.addEventListener('click', () => card.classList.toggle('flipped'));
-                card.addEventListener('touchend', e => { e.preventDefault(); card.classList.toggle('flipped'); }, { passive: false });
-                grid.appendChild(card);
+            /* ===== ANTI-INSPECT ===== */
+            document.addEventListener('contextmenu', e => e.preventDefault());
+            document.addEventListener('selectstart', e => e.preventDefault());
+            document.addEventListener('dragstart', e => e.preventDefault());
+            document.addEventListener('copy', e => e.preventDefault());
+            document.addEventListener('keydown', e => {
+                const k = e.key.toLowerCase();
+                if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && 'ijck'.includes(k)) || (e.ctrlKey && 'usap'.includes(k)) || (e.metaKey && e.altKey && 'ij'.includes(k)) || (e.metaKey && 'usap'.includes(k))) { e.preventDefault(); e.stopPropagation(); return false; }
             });
-        }
 
-        /* CAROUSEL */
-        let carIdx = 0;
-        const photoData = PHOTOS.map((p, i) => ({ ...p, idx: i }));
-        function buildCarousel() {
-            const track = document.getElementById('carouselTrack');
-            const dots = document.getElementById('cDots');
-            track.innerHTML = ''; dots.innerHTML = '';
-            photoData.forEach((p, i) => {
-                const slide = document.createElement('div'); slide.className = 'carousel-slide';
-                const wrap = document.createElement('div'); wrap.className = 'carousel-img-wrap';
-                if (p.src) {
-                    const blurBg = document.createElement('img'); blurBg.className = 'carousel-bg-blur'; blurBg.src = p.src; blurBg.alt = '';
-                    const img = document.createElement('img'); img.src = p.src; img.alt = '';
-                    img.onclick = () => openLb(p.src);
-                    wrap.appendChild(blurBg);
-                    wrap.appendChild(img);
-                } else {
-                    wrap.innerHTML = `<div class="carousel-ph"><span class="ph-emoji">📷</span><span class="ph-txt">Tap untuk upload foto</span><input type="file" accept="image/*" onchange="uploadCarousel(this,${i})"></div>`;
+            /* ===== CUSTOM CURSOR ===== */
+            const cur = document.getElementById('cur');
+            const curEmojis = ['💗', '💖', '✨', '🌸', '💕']; let ci = 0;
+            let mx = 0, my = 0;
+            document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cur.style.left = mx + 'px'; cur.style.top = my + 'px'; });
+            document.addEventListener('click', () => { ci = (ci + 1) % curEmojis.length; cur.textContent = curEmojis[ci]; });
+
+            /* ===== SPARKLE ===== */
+            const spE = ['✨', '💗', '🌸', '⭐', '💖', '🩷', '🌟'];
+            function sparkle(x, y) {
+                for (let i = 0; i < 4; i++) {
+                    const el = document.createElement('div'); el.className = 'sp';
+                    el.textContent = spE[Math.floor(Math.random() * spE.length)];
+                    const a = Math.random() * 360, d = 28 + Math.random() * 38;
+                    el.style.cssText = `left:${x}px;top:${y}px;--dx:${Math.cos(a * Math.PI / 180) * d}px;--dy:${Math.sin(a * Math.PI / 180) * d}px;animation-delay:${i * 55}ms;font-size:${12 + Math.random() * 8}px`;
+                    document.body.appendChild(el); setTimeout(() => el.remove(), 750);
                 }
-                const cap = document.createElement('div'); cap.className = 'carousel-cap'; cap.textContent = p.caption;
-                slide.appendChild(wrap); slide.appendChild(cap);
-                track.appendChild(slide);
-                const dot = document.createElement('div'); dot.className = 'c-dot' + (i === 0 ? ' active' : '');
-                dot.onclick = () => goCarousel(i);
-                dots.appendChild(dot);
-            });
-            // touch swipe
-            let sx = 0;
-            const cw = document.getElementById('carouselWrap');
-            cw.addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, { passive: true });
-            cw.addEventListener('touchend', e => {
-                const dx = e.changedTouches[0].clientX - sx;
-                if (Math.abs(dx) > 40) carouselMove(dx < 0 ? 1 : -1);
-            }, { passive: true });
-        }
-        function carouselMove(dir) { goCarousel(Math.max(0, Math.min(photoData.length - 1, carIdx + dir))); }
-        function goCarousel(i) {
-            carIdx = i;
-            document.getElementById('carouselTrack').style.transform = `translateX(-${i * 100}%)`;
-            document.querySelectorAll('.c-dot').forEach((d, j) => d.classList.toggle('active', j === i));
-        }
-        function uploadCarousel(input, idx) {
-            if (!input.files || !input.files[0]) return;
-            const r = new FileReader();
-            r.onload = e => {
-                photoData[idx].src = e.target.result;
-                buildCarousel(); goCarousel(carIdx);
-            };
-            r.readAsDataURL(input.files[0]);
-        }
-
-        /* TIMELINE */
-        function buildTimeline() {
-            const tl = document.getElementById('timelineEl');
-            TIMELINE.forEach(item => {
-                tl.innerHTML += `<div class="tl-item">
-      <div class="tl-dot">${item.emoji}</div>
-      <div class="tl-date">${item.date}</div>
-      <div class="tl-title">${item.title}</div>
-      <div class="tl-desc">${item.desc}</div>
-    </div>`;
-            });
-        }
-
-        /* ===== TYPEWRITER ===== */
-        function startTypewriter() {
-            const openerEl = document.getElementById('twEl');
-            const bodyEl = document.getElementById('letterBody');
-            
-            // Ambil paragraf dan tanda tangan asli dari HTML
-            const paragraphs = Array.from(bodyEl.querySelectorAll('p')).map(p => p.innerHTML);
-            const signature = bodyEl.querySelector('.letter-sig') ? bodyEl.querySelector('.letter-sig').innerHTML : '';
-            
-            // Kosongkan kontainer surat agar bisa diketik satu per satu
-            bodyEl.innerHTML = '';
-            bodyEl.style.opacity = '1';
-            
-            const openerText = 'Untuk Sayangku yang paling kusayang,';
-            openerEl.innerHTML = '<span class="tw-cur"></span>';
-            
-            let i = 0;
-            function typeOpenerChar() {
-                if (i >= openerText.length) {
-                    openerEl.innerHTML = openerText;
-                    // Setelah opener selesai, mulailah mengetik paragraf demi paragraf
-                    setTimeout(() => typeParagraphs(paragraphs, signature, 0), 400);
-                    return;
-                }
-
-                let nextDelay = 65; // Kecepatan dasar mengetik opener
-                const charTyped = openerText[i];
-                if (charTyped === ',') {
-                    nextDelay = 400; // Jeda sejenak setelah koma pada sapaan
-                }
-
-                i++;
-                openerEl.innerHTML = openerText.slice(0, i) + '<span class="tw-cur"></span>';
-                setTimeout(typeOpenerChar, nextDelay);
             }
-            typeOpenerChar();
-        }
+            document.addEventListener('click', e => sparkle(e.clientX, e.clientY));
+            document.addEventListener('touchstart', e => { const t = e.touches[0]; sparkle(t.clientX, t.clientY); }, { passive: true });
 
-        function typeParagraphs(paragraphs, signature, index) {
-            const bodyEl = document.getElementById('letterBody');
-            if (index >= paragraphs.length) {
-                // Semua paragraf selesai, ketik tanda tangan jika ada
-                if (signature) {
-                    setTimeout(() => typeSignature(signature), 400);
+            /* ===== CANVAS PARTICLES ===== */
+            const canvas = document.getElementById('particleCanvas');
+            const ctx = canvas.getContext('2d');
+            const pEmojis = ['💗', '💖', '💕', '🌸', '✨', '💝', '🩷'];
+            let particles = [];
+
+            function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas, { passive: true });
+
+            class Particle {
+                constructor() { this.reset(true) }
+                reset(init = false) {
+                    this.x = Math.random() * canvas.width;
+                    this.y = init ? Math.random() * canvas.height : canvas.height + 20;
+                    this.size = 11 + Math.random() * 12;
+                    this.speed = 0.4 + Math.random() * 0.7;
+                    this.drift = (Math.random() - .5) * 0.4;
+                    this.rot = Math.random() * 360;
+                    this.rotSpeed = (Math.random() - .5) * 1.2;
+                    this.alpha = 0.3 + Math.random() * .4;
+                    this.emoji = pEmojis[Math.floor(Math.random() * pEmojis.length)];
                 }
-                return;
+                update() {
+                    this.y -= this.speed; this.x += this.drift; this.rot += this.rotSpeed;
+                    if (this.y < -30) this.reset();
+                }
+                draw() {
+                    ctx.save(); ctx.globalAlpha = this.alpha;
+                    ctx.font = this.size + 'px serif';
+                    ctx.translate(this.x, this.y); ctx.rotate(this.rot * Math.PI / 180);
+                    ctx.fillText(this.emoji, -this.size / 2, -this.size / 2);
+                    ctx.restore();
+                }
             }
 
-            // Buat elemen paragraf baru
-            const pEl = document.createElement('p');
-            pEl.innerHTML = '<span class="tw-cur"></span>';
-            bodyEl.appendChild(pEl);
+            // Only 18 particles — lightweight
+            for (let i = 0; i < 18; i++)particles.push(new Particle());
 
-            const text = paragraphs[index];
-            let i = 0;
-            
-            function typeChar() {
-                if (i >= text.length) {
-                    pEl.innerHTML = text; // Hapus kursor berkedip setelah paragraf selesai
-                    // Lanjut mengetik paragraf berikutnya setelah jeda singkat
-                    setTimeout(() => typeParagraphs(paragraphs, signature, index + 1), 350);
-                    return;
-                }
-
-                let charCount = 1;
-                let nextDelay = 45; // Kecepatan mengetik isi paragraf dasar (sangat ideal)
-
-                // Penanganan khusus tag HTML (misal <br>) agar tidak terpotong saat proses ketik
-                if (text[i] === '<') {
-                    const endTag = text.indexOf('>', i);
-                    if (endTag !== -1) {
-                        charCount = endTag - i + 1;
-                    }
-                } else {
-                    // Penanganan surrogate pairs untuk emoji agar tidak pecah/eror kotak silang saat diketik
-                    const code = text.charCodeAt(i);
-                    if (code >= 0xD800 && code <= 0xDBFF) {
-                        charCount = 2;
-                    }
-                }
-
-                // Ambil karakter yang baru saja diketik untuk menentukan intonasi jeda baca
-                const charTyped = text.substring(i, i + charCount);
-                
-                // Logika jeda dinamis (intonasi membaca manusia asli)
-                if ('.!?'.includes(charTyped)) {
-                    nextDelay = 650; // Jeda 0.65 detik di akhir kalimat (titik, seru, tanya) agar meresap ke hati
-                } else if (',;:—'.includes(charTyped)) {
-                    nextDelay = 320; // Jeda 0.32 detik di koma, titik koma, titik dua, tanda hubung untuk bernapas
-                }
-
-                i += charCount;
-                pEl.innerHTML = text.slice(0, i) + '<span class="tw-cur"></span>';
-                
-                // Panggil karakter berikutnya secara rekursif dengan jeda dinamis!
-                setTimeout(typeChar, nextDelay);
+            let animRunning = true;
+            function animLoop() {
+                if (!animRunning) return;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => { p.update(); p.draw(); });
+                requestAnimationFrame(animLoop);
             }
-            typeChar();
-        }
+            animLoop();
 
-        function typeSignature(sigText) {
-            const bodyEl = document.getElementById('letterBody');
-            const sigEl = document.createElement('div');
-            sigEl.className = 'letter-sig';
-            sigEl.innerHTML = '<span class="tw-cur"></span>';
-            bodyEl.appendChild(sigEl);
-
-            let i = 0;
-            function typeSigChar() {
-                if (i >= sigText.length) {
-                    sigEl.innerHTML = sigText;
-                    return;
-                }
-                
-                let charCount = 1;
-                let nextDelay = 55; // Kecepatan mengetik tanda tangan dasar
-
-                if (sigText[i] === '<') {
-                    const endTag = sigText.indexOf('>', i);
-                    if (endTag !== -1) {
-                        charCount = endTag - i + 1;
-                    }
-                } else {
-                    const code = sigText.charCodeAt(i);
-                    if (code >= 0xD800 && code <= 0xDBFF) {
-                        charCount = 2;
-                    }
-                }
-                
-                const charTyped = sigText.substring(i, i + charCount);
-                if ('.!?'.includes(charTyped)) {
-                    nextDelay = 650; // Jeda di titik tanda tangan
-                } else if (',;—'.includes(charTyped)) {
-                    nextDelay = 320;
-                }
-
-                i += charCount;
-                sigEl.innerHTML = sigText.slice(0, i) + '<span class="tw-cur"></span>';
-                setTimeout(typeSigChar, nextDelay);
-            }
-            typeSigChar();
-        }
-
-        /* ===== SCROLL REVEAL ===== */
-        function initScrollReveal() {
-            const obs = new IntersectionObserver(entries => {
-                entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
-            }, { threshold: .1, rootMargin: '0px 0px -40px 0px' });
-            document.querySelectorAll('.reveal').forEach(el => {
-                const r = el.getBoundingClientRect();
-                if (r.top < window.innerHeight) el.classList.add('in');
-                else obs.observe(el);
-            });
-        }
-
-        /* ===== SCROLL PROGRESS ===== */
-        let ticking = false;
-        window.addEventListener('scroll', () => {
-            if (!ticking) {
-                requestAnimationFrame(() => {
-                    const bar = document.getElementById('scrollBar');
-                    if (bar.style.display === 'none') { ticking = false; return; }
-                    const tot = document.body.scrollHeight - window.innerHeight;
-                    if (tot > 0) bar.style.width = (window.scrollY / tot * 100) + '%';
-                    ticking = false;
-                });
-                ticking = true;
-            }
-        }, { passive: true });
-
-        /* ===== LIGHTBOX ===== */
-        function openLb(src) { document.getElementById('lbImg').src = src; document.getElementById('lb').classList.add('on'); }
-        function closeLb() { document.getElementById('lb').classList.remove('on'); }
-        document.getElementById('lb').addEventListener('click', function (e) { if (e.target === this) closeLb(); });
-
-        /* ===== VIRTUAL HUG ===== */
-        let hugCount = 0;
-        const hugTexts = ['Pelukan dari aku 🤗', 'Satu lagi buat kamu 💗', 'Dipeluk terus~ 🥰', 'Kamu udah tau kamu disayang, kan? 💕', 'Dari jauh, tapi rasain nggak? 🌸', 'I\'m here always~ ♡', 'Nggak bosen dipeluk? 😄', 'Mau seribu kali juga boleh 💖'];
-        function doHug() {
-            hugCount++;
-            const btn = document.getElementById('hugBtn');
-            btn.classList.add('hugged');
-            setTimeout(() => btn.classList.remove('hugged'), 300);
-            document.getElementById('hugText').textContent = hugTexts[Math.min(hugCount - 1, hugTexts.length - 1)];
-            document.getElementById('hugCount').textContent = hugCount > 1 ? `${hugCount}x pelukan terkirim 💌` : '';
-            sparkle(window.innerWidth / 2, window.innerHeight / 2);
-            launchConfetti();
-        }
-
-        /* ===== LOVE METER ===== */
-        const loveSlider = document.getElementById('loveSlider');
-        const meterFill = document.getElementById('meterFill');
-        const meterVal = document.getElementById('meterVal');
-        const meterMsg = document.getElementById('meterMsg');
-
-        if (loveSlider) {
-            loveSlider.addEventListener('input', (e) => {
-                const val = e.target.value;
-                meterFill.style.width = val + '%';
-                meterVal.textContent = val + '%';
-
-                if (val == 0) {
-                    meterMsg.textContent = "Masa 0%? Ayo geser ke kanan! 🥺";
-                    meterVal.classList.remove('maxed');
-                } else if (val < 30) {
-                    meterMsg.textContent = "Dikit bangettt, tambahin lagi dong! 😢";
-                    meterVal.classList.remove('maxed');
-                } else if (val < 60) {
-                    meterMsg.textContent = "Lumayan... tapi masa cuma segini? 🤔";
-                    meterVal.classList.remove('maxed');
-                } else if (val < 90) {
-                    meterMsg.textContent = "Wah udah lumayan sayang nih ceritanya? Tapi belum mentok! 🫣";
-                    meterVal.classList.remove('maxed');
-                } else if (val < 100) {
-                    meterMsg.textContent = "Sikit lagiiiii! Ayo mentokin! 🚀";
-                    meterVal.classList.remove('maxed');
-                } else {
-                    meterMsg.innerHTML = "Yeayyy 100%! Aku juga sayang banget sama kamu! 💖🥰";
-                    meterVal.classList.add('maxed');
-                    if (Math.random() > 0.5) sparkle(window.innerWidth / 2, window.innerHeight / 2);
-                }
-            });
-        }
-
-        /* ===== FULLSCREEN HELPER ===== */
-        function goFullscreen() {
-            const doc = document.documentElement;
-            if (doc.requestFullscreen) {
-                doc.requestFullscreen().catch(err => console.log("Fullscreen blocked:", err));
-            } else if (doc.mozRequestFullScreen) { /* Firefox */
-                doc.mozRequestFullScreen().catch(err => console.log("Fullscreen blocked:", err));
-            } else if (doc.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
-                doc.webkitRequestFullscreen().catch(err => console.log("Fullscreen blocked:", err));
-            } else if (doc.msRequestFullscreen) { /* IE/Edge */
-                doc.msRequestFullscreen().catch(err => console.log("Fullscreen blocked:", err));
-            }
-        }
-
-        /* ===== CANDLE BLOW LOGIC ===== */
-        let audioCtx = null;
-        let analyser = null;
-        let micStream = null;
-        let blowLoop = null;
-
-        function openCandle() {
-            goFullscreen(); // Memicu Layar Penuh (Fullscreen) secara elegan untuk menyembunyikan bilah alamat (URL) atas
-            document.getElementById('celeb').classList.remove('on');
-            document.getElementById('cdPage').style.display = 'none';
-            document.getElementById('candlePage').style.display = 'flex';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-
-            // BACKUP SAFE: Selalu bisa tap/sentuh lilin kapan saja untuk meniup/memadamkan
-            document.getElementById('theCandle').addEventListener('click', extinguishCandle);
-            document.getElementById('theCandle').addEventListener('touchstart', extinguishCandle, { passive: true });
-
-            navigator.mediaDevices.getUserMedia({ audio: true })
-                .then(stream => {
-                    micStream = stream;
-                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                    analyser = audioCtx.createAnalyser();
-                    const source = audioCtx.createMediaStreamSource(stream);
-                    source.connect(analyser);
-                    analyser.fftSize = 256;
-                    const bufferLength = analyser.frequencyBinCount;
-                    const dataArray = new Uint8Array(bufferLength);
-
-                    let blowCount = 0;
-                    document.getElementById('candleSub').textContent = "Tiup yang kenceng ke mic HP kamu! 🌬️";
-
-                    function checkBlow() {
-                        analyser.getByteFrequencyData(dataArray);
-                        let sum = 0;
-                        for (let i = 0; i < bufferLength; i++) sum += dataArray[i];
-                        let avg = sum / bufferLength;
-
-                        // If loud blowing sound detected
-                        if (avg > 80) { // Threshold may need tweak, 80 is reasonable for a blow
-                            blowCount++;
-                        } else {
-                            blowCount = Math.max(0, blowCount - 0.5); // Decay
-                        }
-
-                        if (blowCount > 15) { // Needs sustained blowing for a fraction of a sec
-                            extinguishCandle();
-                        } else {
-                            blowLoop = requestAnimationFrame(checkBlow);
-                        }
-                    }
-                    checkBlow();
-                })
-                .catch(err => {
-                    // If denied or no mic, fallback prompt
-                    document.getElementById('candleSub').textContent = "(Mic tidak aktif, tap lilinnya untuk meniup! 👆)";
-                });
-        }
-
-        function extinguishCandle() {
-            if (blowLoop) cancelAnimationFrame(blowLoop);
-            if (micStream) micStream.getTracks().forEach(t => t.stop());
-            if (audioCtx) audioCtx.close();
-
-            // Lepas event listener agar tidak trigger ganda jika di-tap berulang kali
-            document.getElementById('theCandle').removeEventListener('click', extinguishCandle);
-            document.getElementById('theCandle').removeEventListener('touchstart', extinguishCandle);
-
-            const flame = document.getElementById('theFlame');
-            flame.classList.add('out');
-
-            // Add smoke
-            const smoke = document.createElement('div');
-            smoke.className = 'smoke puff';
-            document.getElementById('theCandle').appendChild(smoke);
-
-            document.getElementById('candleTxt').textContent = "Yeayyy! Selamat Ulang Tahun! 🎉";
-            document.getElementById('candleSub').style.display = "none";
-            document.getElementById('candlePage').style.background = "#fff"; // Light up
-            document.getElementById('candleTxt').style.color = "#ff7eb3";
-            document.getElementById('candleTxt').style.textShadow = "none";
-
-            // Proceed to quiz after 2.8s
+            /* ===== INTRO ===== */
             setTimeout(() => {
-                document.getElementById('candlePage').style.display = 'none';
-                document.getElementById('quizPage').style.display = 'flex';
-                // Trigger play background music if not playing yet
-                if (!playing) toggleMusic();
-            }, 2800);
-        }
-
-        /* ===== FINGERPRINT SCANNER ===== */
-        let fpProgress = 0;
-        let fpInterval = null;
-        let fpDone = false;
-
-        function startFp(e) {
-            if (fpDone) return;
-            const fpWrap = document.getElementById('fpWrap');
-            const fpScan = document.getElementById('fpScan');
-            const fpMsg = document.getElementById('fpMsg');
-            fpWrap.classList.add('scanning');
-            fpMsg.textContent = "Tahan terus... ⏳";
-            fpProgress = 0;
-
-            fpInterval = setInterval(() => {
-                fpProgress += 2; // 50 steps = 100% (50 * 60ms = 3000ms)
-                fpScan.style.height = fpProgress + '%';
-                if (fpProgress >= 100) {
-                    clearInterval(fpInterval);
-                    completeFp();
+                const introEl = document.getElementById('intro');
+                if (introEl) {
+                    introEl.classList.add('out');
+                    setTimeout(() => introEl.remove(), 1000);
                 }
-            }, 60);
-        }
+            }, 2300);
 
-        function stopFp(e) {
-            if (fpDone) return;
-            const fpWrap = document.getElementById('fpWrap');
-            const fpScan = document.getElementById('fpScan');
-            const fpMsg = document.getElementById('fpMsg');
-            clearInterval(fpInterval);
-            fpWrap.classList.remove('scanning');
-            fpScan.style.height = '0%';
-            fpProgress = 0;
-            fpMsg.textContent = "Yah dilepas, tahan 3 detik ya! 🥺";
-        }
+            /* ===== SECURE TIME VERIFICATION (ANTI-CLOCK-TAMPERING) ===== */
+            let timeOffset = 0;
+            let timeVerified = false;
 
-        function completeFp() {
-            fpDone = true;
-            const fpWrap = document.getElementById('fpWrap');
-            const fpMsg = document.getElementById('fpMsg');
-            fpWrap.classList.remove('scanning');
-            fpWrap.classList.add('success');
-            fpMsg.textContent = "Janji Terkunci Selamanya! 🔒💖";
-            fpMsg.classList.add('success');
-            if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
-            for (let i = 0; i < 10; i++) setTimeout(() => sparkle(window.innerWidth / 2 + (Math.random() - 0.5) * 100, window.innerHeight / 2 + (Math.random() - 0.5) * 100), i * 100);
-        }
-
-        // Wait for DOM to be parsed for fingerprint elements
-        setTimeout(() => {
-            const fpWrap = document.getElementById('fpWrap');
-            if (fpWrap) {
-                fpWrap.addEventListener('mousedown', startFp);
-                fpWrap.addEventListener('touchstart', startFp, { passive: true });
-                window.addEventListener('mouseup', stopFp);
-                window.addEventListener('touchend', stopFp);
-            }
-        }, 100);
-
-        /* ===== MUSIC ===== */
-        let playing = false;
-        let fadeInterval = null;
-
-        function toggleMusic() {
-            const btn = document.getElementById('musicBtn');
-            const audio = document.getElementById('bgMusic');
-
-            if (playing) {
-                // FADE OUT: Turunkan volume perlahan sebelum dijeda agar transisi terdengar lembut
-                clearInterval(fadeInterval);
-                let vol = audio.volume;
-                fadeInterval = setInterval(() => {
-                    vol -= 0.05;
-                    if (vol <= 0) {
-                        vol = 0;
-                        clearInterval(fadeInterval);
-                        audio.pause();
-                        playing = false;
-                        btn.textContent = '🎵';
-                        btn.classList.remove('on');
+            async function verifyTime() {
+                try {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 3500); // 3.5s timeout
+                    // Try WorldTimeAPI
+                    const response = await fetch('https://worldtimeapi.org/api/timezone/Asia/Jakarta', { signal: controller.signal });
+                    clearTimeout(timeoutId);
+                    if (response.ok) {
+                        const data = await response.json();
+                        const serverTime = new Date(data.datetime);
+                        const localTime = new Date();
+                        timeOffset = serverTime.getTime() - localTime.getTime();
+                        timeVerified = true;
+                        console.log("Time verified with server. Offset:", timeOffset);
+                        updateCd();
                     }
-                    audio.volume = vol;
-                }, 50);
-            } else {
-                clearInterval(fadeInterval);
-                // Jika baru pertama kali diputar (currentTime masih 0), lewati intro 15 detik langsung ke bagian vokal/nyanyian utama
-                if (audio.currentTime === 0) {
-                    audio.currentTime = 15;
+                } catch (e) {
+                    console.warn("Failed to fetch server time, using local time:", e);
+                    // Fallback to timeapi.io
+                    try {
+                        const controller = new AbortController();
+                        const timeoutId = setTimeout(() => controller.abort(), 3000);
+                        const response = await fetch('https://timeapi.io/api/Time/current/zone?timeZone=Asia/Jakarta', { signal: controller.signal });
+                        clearTimeout(timeoutId);
+                        if (response.ok) {
+                            const data = await response.json();
+                            const serverTime = new Date(data.dateTime);
+                            const localTime = new Date();
+                            timeOffset = serverTime.getTime() - localTime.getTime();
+                            timeVerified = true;
+                            console.log("Time verified with backup server. Offset:", timeOffset);
+                            updateCd();
+                        }
+                    } catch (err2) {
+                        console.warn("Backup server also failed:", err2);
+                    }
                 }
-                audio.volume = 0; // Mulai dari volume 0 (sunyi)
-                audio.play()
-                    .then(() => {
-                        playing = true;
-                        btn.textContent = '🔇';
-                        btn.classList.add('on');
-
-                        // FADE IN: Naikkan volume secara bertahap sampai tingkat nyaman (40%) dalam 2 detik
-                        let vol = 0;
-                        fadeInterval = setInterval(() => {
-                            vol += 0.02;
-                            if (vol >= 0.4) { // 40% adalah batas ideal untuk musik latar lembut
-                                vol = 0.4;
-                                clearInterval(fadeInterval);
-                            }
-                            audio.volume = vol;
-                        }, 100);
-                    })
-                    .catch(e => console.log("Audio failed to play:", e));
             }
-        }
+            verifyTime();
 
-        /* ===== CONFETTI ===== */
-        const cC = ['#FFB3CC', '#C9B8FF', '#B3F0E0', '#FFD4B3', '#FFF0A0', '#ff7eb3', '#7ed3c9', '#ffb347', '#ff9ec8'];
-        function spawnC() {
-            const el = document.createElement('div'); el.className = 'cp';
-            const sz = 5 + Math.random() * 10;
-            el.style.cssText = `left:${Math.random() * 100}vw;width:${sz}px;height:${sz}px;background:${cC[Math.floor(Math.random() * cC.length)]};border-radius:${Math.random() > .4 ? '50%' : '2px'};animation-duration:${2.2 + Math.random() * 3}s;animation-delay:${Math.random() * .6}s`;
-            document.body.appendChild(el); setTimeout(() => el.remove(), 6000);
-        }
-        function launchConfetti() { for (let i = 0; i < 50; i++)setTimeout(spawnC, i * 20) }
-        function massConfetti() { for (let i = 0; i < 140; i++)setTimeout(spawnC, i * 15) }
+            function getSecureDate() {
+                const local = new Date();
+                return new Date(local.getTime() + timeOffset);
+            }
+
+            /* ===== COUNTDOWN ===== */
+            let triggered = false;
+            function isBday() { 
+                const n = getSecureDate(); 
+                return n.getMonth() === 4 && n.getDate() === 26; 
+            }
+            function updateCd() {
+                const now = getSecureDate();
+                if (isBday()) {
+                    ['days', 'hours', 'minutes', 'seconds'].forEach(id => setN(id, '00'));
+                    document.getElementById('cdMsg').textContent = '🎉 Hari ini harinya!! 🎂';
+                    if (!triggered) { triggered = true; setTimeout(showCeleb, 700); }
+                    return;
+                }
+                const todayMid = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                const bdayMid = new Date(now.getFullYear(), 4, 26);
+                const calDays = Math.round((bdayMid - todayMid) / 86400000);
+                const diff = bdayMid - now;
+                const d = Math.floor(diff / 86400000);
+                const h = Math.floor((diff % 86400000) / 3600000);
+                const m = Math.floor((diff % 3600000) / 60000);
+                const s = Math.floor((diff % 60000) / 1000);
+                setN('days', pad(d)); setN('hours', pad(h)); setN('minutes', pad(m)); setNpop('seconds', pad(s));
+                document.getElementById('cdMsg').textContent =
+                    calDays === 1 ? '✨ Besok!! Hampir tiba, nggak sabar~' :
+                        calDays <= 7 ? `🌸 Tinggal ${calDays} hari lagi... hampir~` :
+                            `🌷 Masih ${calDays} hari lagi, tapi udah ditunggu dari sekarang`;
+            }
+            function pad(n) { return String(n).padStart(2, '0') }
+            function setN(id, v) { 
+                const el = document.getElementById(id);
+                if (el) el.textContent = v;
+            }
+            function setNpop(id, v) {
+                const el = document.getElementById(id);
+                if (el) {
+                    if (el.textContent !== v) { el.textContent = v; el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop'); setTimeout(() => el.classList.remove('pop'), 240); }
+                }
+            }
+            setInterval(updateCd, 1000); updateCd();
+
+            /* ===== CELEBRATE ===== */
+            function showCeleb() { document.getElementById('celeb').classList.add('on'); massConfetti(); }
+            function openQuiz() {
+                document.getElementById('celeb').classList.remove('on');
+                document.getElementById('cdPage').style.display = 'none';
+                document.getElementById('quizPage').style.display = 'flex';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            function passQuiz() {
+                goFullscreen(); // Memastikan layar penuh tetap aktif secara stabil saat masuk ke kejutan utama
+                document.getElementById('quizPage').style.display = 'none';
+                const rp = document.getElementById('revealPage');
+                rp.style.display = 'block';
+                document.getElementById('fab').style.display = 'flex';
+                document.getElementById('scrollBar').style.display = 'block';
+                launchConfetti(); window.scrollTo({ top: 0, behavior: 'smooth' });
+                buildAll();
+                setTimeout(startTypewriter, 500);
+                initScrollReveal();
+            }
+
+            /* QUIZ NO BUTTON DODGE LOGIC */
+            const btnNo = document.getElementById('btnNo');
+            function dodgeBtn() {
+                const rx = Math.floor(Math.random() * 200) - 100;
+                const ry = Math.floor(Math.random() * 150) - 50;
+                btnNo.style.transform = `translate(calc(-50% + ${rx}px), ${ry}px)`;
+            }
+            btnNo.addEventListener('mouseover', dodgeBtn);
+            btnNo.addEventListener('touchstart', (e) => { e.preventDefault(); dodgeBtn(); }, { passive: false });
+
+            /* ===== SECURE PREVIEW SYSTEM ===== */
+            const urlParams = new URLSearchParams(window.location.search);
+            const prevBtn = document.getElementById('prevBtn');
+            // Hide preview button by default to prevent accidental clicks or guessing, only show if URL has ?preview=true or ?test=true
+            if (urlParams.has('preview') || urlParams.has('test')) {
+                if (prevBtn) prevBtn.style.display = 'flex';
+            }
+
+            let previewClicks = 0;
+            function preview() {
+                previewClicks++;
+                if (previewClicks >= 10) {
+                    // Password prompt for absolute safety! Even if pacar adds ?preview=true, they can't enter without the key
+                    const pw = prompt("Masukkan kunci preview/admin:");
+                    if (pw && pw.toLowerCase() === "duwi") {
+                        if (!triggered) {
+                            triggered = true;
+                            showCeleb();
+                        }
+                    } else if (pw !== null) {
+                        alert("Kunci salah! Akses ditolak 🔒");
+                    }
+                } else {
+                    // Memberikan letupan bintang romantis setiap kali tombol rahasia diketuk
+                    sparkle(window.innerWidth / 2, window.innerHeight / 2);
+                }
+            }
+
+            /* ===== BUILD CONTENT ===== */
+            let built = false;
+            function buildAll() {
+                if (built) return; built = true;
+                buildFlipCards();
+                buildCarousel();
+                buildTimeline();
+            }
+
+            /* FLIP CARDS */
+            function buildFlipCards() {
+                const grid = document.getElementById('flipGrid');
+                if (!grid) return;
+                REASONS.forEach((r, i) => {
+                    const card = document.createElement('div'); card.className = 'flip-card';
+                    card.innerHTML = `<div class="flip-inner">
+          <div class="flip-front"><span class="flip-num">${r.emoji}</span><span class="flip-hint">Alasan #${i + 1}</span></div>
+          <div class="flip-back"><span class="flip-reason">${r.text}</span></div>
+        </div>`;
+                    card.addEventListener('click', () => card.classList.toggle('flipped'));
+                    card.addEventListener('touchend', e => { e.preventDefault(); card.classList.toggle('flipped'); }, { passive: false });
+                    grid.appendChild(card);
+                });
+            }
+
+            /* CAROUSEL */
+            let carIdx = 0;
+            const photoData = PHOTOS.map((p, i) => ({ ...p, idx: i }));
+            function buildCarousel() {
+                const track = document.getElementById('carouselTrack');
+                const dots = document.getElementById('cDots');
+                if (!track || !dots) return;
+                track.innerHTML = ''; dots.innerHTML = '';
+                photoData.forEach((p, i) => {
+                    const slide = document.createElement('div'); slide.className = 'carousel-slide';
+                    const wrap = document.createElement('div'); wrap.className = 'carousel-img-wrap';
+                    if (p.src) {
+                        const blurBg = document.createElement('img'); blurBg.className = 'carousel-bg-blur'; blurBg.src = p.src; blurBg.alt = '';
+                        const img = document.createElement('img'); img.src = p.src; img.alt = '';
+                        img.onclick = () => openLb(p.src);
+                        wrap.appendChild(blurBg);
+                        wrap.appendChild(img);
+                    } else {
+                        wrap.innerHTML = `<div class="carousel-ph"><span class="ph-emoji">📷</span><span class="ph-txt">Tap untuk upload foto</span><input type="file" accept="image/*"></div>`;
+                        const fileInput = wrap.querySelector('input[type="file"]');
+                        if (fileInput) {
+                            fileInput.addEventListener('change', (e) => uploadCarousel(e.target, i));
+                        }
+                    }
+                    const cap = document.createElement('div'); cap.className = 'carousel-cap'; cap.textContent = p.caption;
+                    slide.appendChild(wrap); slide.appendChild(cap);
+                    track.appendChild(slide);
+                    const dot = document.createElement('div'); dot.className = 'c-dot' + (i === 0 ? ' active' : '');
+                    dot.onclick = () => goCarousel(i);
+                    dots.appendChild(dot);
+                });
+                // touch swipe
+                let sx = 0;
+                const cw = document.getElementById('carouselWrap');
+                if (cw) {
+                    cw.addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, { passive: true });
+                    cw.addEventListener('touchend', e => {
+                        const dx = e.changedTouches[0].clientX - sx;
+                        if (Math.abs(dx) > 40) carouselMove(dx < 0 ? 1 : -1);
+                    }, { passive: true });
+                }
+            }
+            function carouselMove(dir) { goCarousel(Math.max(0, Math.min(photoData.length - 1, carIdx + dir))); }
+            function goCarousel(i) {
+                const track = document.getElementById('carouselTrack');
+                if (track) track.style.transform = `translateX(-${i * 100}%)`;
+                document.querySelectorAll('.c-dot').forEach((d, j) => d.classList.toggle('active', j === i));
+                carIdx = i;
+            }
+            function uploadCarousel(input, idx) {
+                if (!input.files || !input.files[0]) return;
+                const r = new FileReader();
+                r.onload = e => {
+                    photoData[idx].src = e.target.result;
+                    buildCarousel(); goCarousel(carIdx);
+                };
+                r.readAsDataURL(input.files[0]);
+            }
+
+            /* TIMELINE */
+            function buildTimeline() {
+                const tl = document.getElementById('timelineEl');
+                if (!tl) return;
+                tl.innerHTML = '';
+                TIMELINE.forEach(item => {
+                    tl.innerHTML += `<div class="tl-item">
+          <div class="tl-dot">${item.emoji}</div>
+          <div class="tl-date">${item.date}</div>
+          <div class="tl-title">${item.title}</div>
+          <div class="tl-desc">${item.desc}</div>
+        </div>`;
+                });
+            }
+
+            /* ===== TYPEWRITER ===== */
+            function startTypewriter() {
+                const openerEl = document.getElementById('twEl');
+                const bodyEl = document.getElementById('letterBody');
+                if (!openerEl || !bodyEl) return;
+                
+                // Ambil paragraf dan tanda tangan asli dari HTML
+                const paragraphs = Array.from(bodyEl.querySelectorAll('p')).map(p => p.innerHTML);
+                const signature = bodyEl.querySelector('.letter-sig') ? bodyEl.querySelector('.letter-sig').innerHTML : '';
+                
+                // Kosongkan kontainer surat agar bisa diketik satu per satu
+                bodyEl.innerHTML = '';
+                bodyEl.style.opacity = '1';
+                
+                const openerText = 'Untuk Sayangku yang paling kusayang,';
+                openerEl.innerHTML = '<span class="tw-cur"></span>';
+                
+                let i = 0;
+                function typeOpenerChar() {
+                    if (i >= openerText.length) {
+                        openerEl.innerHTML = openerText;
+                        // Setelah opener selesai, mulailah mengetik paragraf demi paragraf
+                        setTimeout(() => typeParagraphs(paragraphs, signature, 0), 400);
+                        return;
+                    }
+
+                    let nextDelay = 65; // Kecepatan dasar mengetik opener
+                    const charTyped = openerText[i];
+                    if (charTyped === ',') {
+                        nextDelay = 400; // Jeda sejenak setelah koma pada sapaan
+                    }
+
+                    i++;
+                    openerEl.innerHTML = openerText.slice(0, i) + '<span class="tw-cur"></span>';
+                    setTimeout(typeOpenerChar, nextDelay);
+                }
+                typeOpenerChar();
+            }
+
+            function typeParagraphs(paragraphs, signature, index) {
+                const bodyEl = document.getElementById('letterBody');
+                if (!bodyEl) return;
+                if (index >= paragraphs.length) {
+                    // Semua paragraf selesai, ketik tanda tangan jika ada
+                    if (signature) {
+                        setTimeout(() => typeSignature(signature), 400);
+                    }
+                    return;
+                }
+
+                // Buat elemen paragraf baru
+                const pEl = document.createElement('p');
+                pEl.innerHTML = '<span class="tw-cur"></span>';
+                bodyEl.appendChild(pEl);
+
+                const text = paragraphs[index];
+                let i = 0;
+                
+                function typeChar() {
+                    if (i >= text.length) {
+                        pEl.innerHTML = text; // Hapus kursor berkedip setelah paragraf selesai
+                        // Lanjut mengetik paragraf berikutnya setelah jeda singkat
+                        setTimeout(() => typeParagraphs(paragraphs, signature, index + 1), 350);
+                        return;
+                    }
+
+                    let charCount = 1;
+                    let nextDelay = 45; // Kecepatan mengetik isi paragraf dasar (sangat ideal)
+
+                    // Penanganan khusus tag HTML (misal <br>) agar tidak terpotong saat proses ketik
+                    if (text[i] === '<') {
+                        const endTag = text.indexOf('>', i);
+                        if (endTag !== -1) {
+                            charCount = endTag - i + 1;
+                        }
+                    } else {
+                        // Penanganan surrogate pairs untuk emoji agar tidak pecah/eror kotak silang saat diketik
+                        const code = text.charCodeAt(i);
+                        if (code >= 0xD800 && code <= 0xDBFF) {
+                            charCount = 2;
+                        }
+                    }
+
+                    // Ambil karakter yang baru saja diketik untuk menentukan intonasi jeda baca
+                    const charTyped = text.substring(i, i + charCount);
+                    
+                    // Logika jeda dinamis (intonasi membaca manusia asli)
+                    if ('.!?'.includes(charTyped)) {
+                        nextDelay = 650; // Jeda 0.65 detik di akhir kalimat (titik, seru, tanya) agar meresap ke hati
+                    } else if (',;:—'.includes(charTyped)) {
+                        nextDelay = 320; // Jeda 0.32 detik di koma, titik koma, titik dua, tanda hubung untuk bernapas
+                    }
+
+                    i += charCount;
+                    pEl.innerHTML = text.slice(0, i) + '<span class="tw-cur"></span>';
+                    
+                    // Panggil karakter berikutnya secara rekursif dengan jeda dinamis!
+                    setTimeout(typeChar, nextDelay);
+                }
+                typeChar();
+            }
+
+            function typeSignature(sigText) {
+                const bodyEl = document.getElementById('letterBody');
+                if (!bodyEl) return;
+                const sigEl = document.createElement('div');
+                sigEl.className = 'letter-sig';
+                sigEl.innerHTML = '<span class="tw-cur"></span>';
+                bodyEl.appendChild(sigEl);
+
+                let i = 0;
+                function typeSigChar() {
+                    if (i >= sigText.length) {
+                        sigEl.innerHTML = sigText;
+                        return;
+                    }
+                    
+                    let charCount = 1;
+                    let nextDelay = 55; // Kecepatan mengetik tanda tangan dasar
+
+                    if (sigText[i] === '<') {
+                        const endTag = sigText.indexOf('>', i);
+                        if (endTag !== -1) {
+                            charCount = endTag - i + 1;
+                        }
+                    } else {
+                        const code = sigText.charCodeAt(i);
+                        if (code >= 0xD800 && code <= 0xDBFF) {
+                            charCount = 2;
+                        }
+                    }
+                    
+                    const charTyped = sigText.substring(i, i + charCount);
+                    if ('.!?'.includes(charTyped)) {
+                        nextDelay = 650; // Jeda di titik tanda tangan
+                    } else if (',;—'.includes(charTyped)) {
+                        nextDelay = 320;
+                    }
+
+                    i += charCount;
+                    sigEl.innerHTML = sigText.slice(0, i) + '<span class="tw-cur"></span>';
+                    setTimeout(typeSigChar, nextDelay);
+                }
+                typeSigChar();
+            }
+
+            /* ===== SCROLL REVEAL ===== */
+            function initScrollReveal() {
+                const obs = new IntersectionObserver(entries => {
+                    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
+                }, { threshold: .1, rootMargin: '0px 0px -40px 0px' });
+                document.querySelectorAll('.reveal').forEach(el => {
+                    const r = el.getBoundingClientRect();
+                    if (r.top < window.innerHeight) el.classList.add('in');
+                    else obs.observe(el);
+                });
+            }
+
+            /* ===== SCROLL PROGRESS ===== */
+            let ticking = false;
+            window.addEventListener('scroll', () => {
+                if (!ticking) {
+                    requestAnimationFrame(() => {
+                        const bar = document.getElementById('scrollBar');
+                        if (!bar || bar.style.display === 'none') { ticking = false; return; }
+                        const tot = document.body.scrollHeight - window.innerHeight;
+                        if (tot > 0) bar.style.width = (window.scrollY / tot * 100) + '%';
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            }, { passive: true });
+
+            /* ===== LIGHTBOX ===== */
+            function openLb(src) { 
+                const lbImg = document.getElementById('lbImg');
+                const lb = document.getElementById('lb');
+                if (lbImg && lb) {
+                    lbImg.src = src; 
+                    lb.classList.add('on'); 
+                }
+            }
+            function closeLb() { 
+                const lb = document.getElementById('lb');
+                if (lb) lb.classList.remove('on'); 
+            }
+
+            /* ===== VIRTUAL HUG ===== */
+            let hugCount = 0;
+            const hugTexts = ['Pelukan dari aku 🤗', 'Satu lagi buat kamu 💗', 'Dipeluk terus~ 🥰', 'Kamu udah tau kamu disayang, kan? 💕', 'Dari jauh, tapi rasain nggak? 🌸', 'I\'m here always~ ♡', 'Nggak bosen dipeluk? 😄', 'Mau seribu kali juga boleh 💖'];
+            function doHug() {
+                hugCount++;
+                const btn = document.getElementById('hugBtn');
+                if (btn) {
+                    btn.classList.add('hugged');
+                    setTimeout(() => btn.classList.remove('hugged'), 300);
+                }
+                const hugTxtEl = document.getElementById('hugText');
+                const hugCountEl = document.getElementById('hugCount');
+                if (hugTxtEl) hugTxtEl.textContent = hugTexts[Math.min(hugCount - 1, hugTexts.length - 1)];
+                if (hugCountEl) hugCountEl.textContent = hugCount > 1 ? `${hugCount}x pelukan terkirim 💌` : '';
+                sparkle(window.innerWidth / 2, window.innerHeight / 2);
+                launchConfetti();
+            }
+
+            /* ===== LOVE METER ===== */
+            const loveSlider = document.getElementById('loveSlider');
+            const meterFill = document.getElementById('meterFill');
+            const meterVal = document.getElementById('meterVal');
+            const meterMsg = document.getElementById('meterMsg');
+
+            if (loveSlider) {
+                loveSlider.addEventListener('input', (e) => {
+                    const val = e.target.value;
+                    if (meterFill) meterFill.style.width = val + '%';
+                    if (meterVal) meterVal.textContent = val + '%';
+
+                    if (!meterMsg) return;
+                    if (val == 0) {
+                        meterMsg.textContent = "Masa 0%? Ayo geser ke kanan! 🥺";
+                        if (meterVal) meterVal.classList.remove('maxed');
+                    } else if (val < 30) {
+                        meterMsg.textContent = "Dikit bangettt, tambahin lagi dong! 😢";
+                        if (meterVal) meterVal.classList.remove('maxed');
+                    } else if (val < 60) {
+                        meterMsg.textContent = "Lumayan... tapi masa cuma segini? 🤔";
+                        if (meterVal) meterVal.classList.remove('maxed');
+                    } else if (val < 90) {
+                        meterMsg.textContent = "Wah udah lumayan sayang nih ceritanya? Tapi belum mentok! 🫣";
+                        if (meterVal) meterVal.classList.remove('maxed');
+                    } else if (val < 100) {
+                        meterMsg.textContent = "Sikit lagiiiii! Ayo mentokin! 🚀";
+                        if (meterVal) meterVal.classList.remove('maxed');
+                    } else {
+                        meterMsg.innerHTML = "Yeayyy 100%! Aku juga sayang banget sama kamu! 💖🥰";
+                        if (meterVal) {
+                            meterVal.classList.add('maxed');
+                            if (Math.random() > 0.5) sparkle(window.innerWidth / 2, window.innerHeight / 2);
+                        }
+                    }
+                });
+            }
+
+            /* ===== FULLSCREEN HELPER ===== */
+            function goFullscreen() {
+                const doc = document.documentElement;
+                if (doc.requestFullscreen) {
+                    doc.requestFullscreen().catch(err => console.log("Fullscreen blocked:", err));
+                } else if (doc.mozRequestFullScreen) { /* Firefox */
+                    doc.mozRequestFullScreen().catch(err => console.log("Fullscreen blocked:", err));
+                } else if (doc.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+                    doc.webkitRequestFullscreen().catch(err => console.log("Fullscreen blocked:", err));
+                } else if (doc.msRequestFullscreen) { /* IE/Edge */
+                    doc.msRequestFullscreen().catch(err => console.log("Fullscreen blocked:", err));
+                }
+            }
+
+            /* ===== CANDLE BLOW LOGIC ===== */
+            let audioCtx = null;
+            let analyser = null;
+            let micStream = null;
+            let blowLoop = null;
+
+            function openCandle() {
+                goFullscreen(); // Memicu Layar Penuh (Fullscreen) secara elegan untuk menyembunyikan bilah alamat (URL) atas
+                document.getElementById('celeb').classList.remove('on');
+                document.getElementById('cdPage').style.display = 'none';
+                document.getElementById('candlePage').style.display = 'flex';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+
+                // BACKUP SAFE: Selalu bisa tap/sentuh lilin kapan saja untuk meniup/memadamkan
+                const theCandle = document.getElementById('theCandle');
+                if (theCandle) {
+                    theCandle.addEventListener('click', extinguishCandle);
+                    theCandle.addEventListener('touchstart', extinguishCandle, { passive: true });
+                }
+
+                navigator.mediaDevices.getUserMedia({ audio: true })
+                    .then(stream => {
+                        micStream = stream;
+                        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                        analyser = audioCtx.createAnalyser();
+                        const source = audioCtx.createMediaStreamSource(stream);
+                        source.connect(analyser);
+                        analyser.fftSize = 256;
+                        const bufferLength = analyser.frequencyBinCount;
+                        const dataArray = new Uint8Array(bufferLength);
+
+                        let blowCount = 0;
+                        document.getElementById('candleSub').textContent = "Tiup yang kenceng ke mic HP kamu! 🌬️";
+
+                        function checkBlow() {
+                            analyser.getByteFrequencyData(dataArray);
+                            let sum = 0;
+                            for (let i = 0; i < bufferLength; i++) sum += dataArray[i];
+                            let avg = sum / bufferLength;
+
+                            // If loud blowing sound detected
+                            if (avg > 80) { // Threshold may need tweak, 80 is reasonable for a blow
+                                blowCount++;
+                            } else {
+                                blowCount = Math.max(0, blowCount - 0.5); // Decay
+                            }
+
+                            if (blowCount > 15) { // Needs sustained blowing for a fraction of a sec
+                                extinguishCandle();
+                            } else {
+                                blowLoop = requestAnimationFrame(checkBlow);
+                            }
+                        }
+                        checkBlow();
+                    })
+                    .catch(err => {
+                        // If denied or no mic, fallback prompt
+                        document.getElementById('candleSub').textContent = "(Mic tidak aktif, tap lilinnya untuk meniup! 👆)";
+                    });
+            }
+
+            function extinguishCandle() {
+                if (blowLoop) cancelAnimationFrame(blowLoop);
+                if (micStream) micStream.getTracks().forEach(t => t.stop());
+                if (audioCtx) audioCtx.close();
+
+                // Lepas event listener agar tidak trigger ganda jika di-tap berulang kali
+                const theCandle = document.getElementById('theCandle');
+                if (theCandle) {
+                    theCandle.removeEventListener('click', extinguishCandle);
+                    theCandle.removeEventListener('touchstart', extinguishCandle);
+                }
+
+                const flame = document.getElementById('theFlame');
+                if (flame) flame.classList.add('out');
+
+                // Add smoke
+                const smoke = document.createElement('div');
+                smoke.className = 'smoke puff';
+                if (theCandle) theCandle.appendChild(smoke);
+
+                document.getElementById('candleTxt').textContent = "Yeayyy! Selamat Ulang Tahun! 🎉";
+                document.getElementById('candleSub').style.display = "none";
+                document.getElementById('candlePage').style.background = "#fff"; // Light up
+                document.getElementById('candleTxt').style.color = "#ff7eb3";
+                document.getElementById('candleTxt').style.textShadow = "none";
+
+                // Proceed to quiz after 2.8s
+                setTimeout(() => {
+                    document.getElementById('candlePage').style.display = 'none';
+                    document.getElementById('quizPage').style.display = 'flex';
+                    // Trigger play background music if not playing yet
+                    if (!playing) toggleMusic();
+                }, 2800);
+            }
+
+            /* ===== FINGERPRINT SCANNER ===== */
+            let fpProgress = 0;
+            let fpInterval = null;
+            let fpDone = false;
+
+            function startFp(e) {
+                if (fpDone) return;
+                const fpWrap = document.getElementById('fpWrap');
+                const fpScan = document.getElementById('fpScan');
+                const fpMsg = document.getElementById('fpMsg');
+                if (fpWrap) fpWrap.classList.add('scanning');
+                if (fpMsg) fpMsg.textContent = "Tahan terus... ⏳";
+                fpProgress = 0;
+
+                fpInterval = setInterval(() => {
+                    fpProgress += 2; // 50 steps = 100% (50 * 60ms = 3000ms)
+                    if (fpScan) fpScan.style.height = fpProgress + '%';
+                    if (fpProgress >= 100) {
+                        clearInterval(fpInterval);
+                        completeFp();
+                    }
+                }, 60);
+            }
+
+            function stopFp(e) {
+                if (fpDone) return;
+                const fpWrap = document.getElementById('fpWrap');
+                const fpScan = document.getElementById('fpScan');
+                const fpMsg = document.getElementById('fpMsg');
+                clearInterval(fpInterval);
+                if (fpWrap) fpWrap.classList.remove('scanning');
+                if (fpScan) fpScan.style.height = '0%';
+                fpProgress = 0;
+                if (fpMsg) fpMsg.textContent = "Yah dilepas, tahan 3 detik ya! 🥺";
+            }
+
+            function completeFp() {
+                fpDone = true;
+                const fpWrap = document.getElementById('fpWrap');
+                const fpMsg = document.getElementById('fpMsg');
+                if (fpWrap) {
+                    fpWrap.classList.remove('scanning');
+                    fpWrap.classList.add('success');
+                }
+                if (fpMsg) {
+                    fpMsg.textContent = "Janji Terkunci Selamanya! 🔒💖";
+                    fpMsg.classList.add('success');
+                }
+                if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+                for (let i = 0; i < 10; i++) setTimeout(() => sparkle(window.innerWidth / 2 + (Math.random() - 0.5) * 100, window.innerHeight / 2 + (Math.random() - 0.5) * 100), i * 100);
+            }
+
+            // Wait for DOM to be parsed for fingerprint elements
+            setTimeout(() => {
+                const fpWrap = document.getElementById('fpWrap');
+                if (fpWrap) {
+                    fpWrap.addEventListener('mousedown', startFp);
+                    fpWrap.addEventListener('touchstart', startFp, { passive: true });
+                    window.addEventListener('mouseup', stopFp);
+                    window.addEventListener('touchend', stopFp);
+                }
+            }, 100);
+
+            /* ===== MUSIC ===== */
+            let playing = false;
+            let fadeInterval = null;
+
+            function toggleMusic() {
+                const btn = document.getElementById('musicBtn');
+                const audio = document.getElementById('bgMusic');
+                if (!btn || !audio) return;
+
+                if (playing) {
+                    // FADE OUT: Turunkan volume perlahan sebelum dijeda agar transisi terdengar lembut
+                    clearInterval(fadeInterval);
+                    let vol = audio.volume;
+                    fadeInterval = setInterval(() => {
+                        vol -= 0.05;
+                        if (vol <= 0) {
+                            vol = 0;
+                            clearInterval(fadeInterval);
+                            audio.pause();
+                            playing = false;
+                            btn.textContent = '🎵';
+                            btn.classList.remove('on');
+                        }
+                        audio.volume = vol;
+                    }, 50);
+                } else {
+                    clearInterval(fadeInterval);
+                    // Jika baru pertama kali diputar (currentTime masih 0), lewati intro 15 detik langsung ke bagian vokal/nyanyian utama
+                    if (audio.currentTime === 0) {
+                        audio.currentTime = 15;
+                    }
+                    audio.volume = 0; // Mulai dari volume 0 (sunyi)
+                    audio.play()
+                        .then(() => {
+                            playing = true;
+                            btn.textContent = '🔇';
+                            btn.classList.add('on');
+
+                            // FADE IN: Naikkan volume secara bertahap sampai tingkat nyaman (40%) dalam 2 detik
+                            let vol = 0;
+                            fadeInterval = setInterval(() => {
+                                vol += 0.02;
+                                if (vol >= 0.4) { // 40% adalah batas ideal untuk musik latar lembut
+                                    vol = 0.4;
+                                    clearInterval(fadeInterval);
+                                }
+                                audio.volume = vol;
+                            }, 100);
+                        })
+                        .catch(e => console.log("Audio failed to play:", e));
+                }
+            }
+
+            /* ===== CONFETTI ===== */
+            const cC = ['#FFB3CC', '#C9B8FF', '#B3F0E0', '#FFD4B3', '#FFF0A0', '#ff7eb3', '#7ed3c9', '#ffb347', '#ff9ec8'];
+            function spawnC() {
+                const el = document.createElement('div'); el.className = 'cp';
+                const sz = 5 + Math.random() * 10;
+                el.style.cssText = `left:${Math.random() * 100}vw;width:${sz}px;height:${sz}px;background:${cC[Math.floor(Math.random() * cC.length)]};border-radius:${Math.random() > .4 ? '50%' : '2px'};animation-duration:${2.2 + Math.random() * 3}s;animation-delay:${Math.random() * .6}s`;
+                document.body.appendChild(el); setTimeout(() => el.remove(), 6000);
+            }
+            function launchConfetti() { for (let i = 0; i < 50; i++)setTimeout(spawnC, i * 20) }
+            function massConfetti() { for (let i = 0; i < 140; i++)setTimeout(spawnC, i * 15) }
+
+            /* ===== DYNAMIC SECURE EVENT LISTENERS BINDINGS (IIFE ENCAPSULATION) ===== */
+            const musicBtn = document.getElementById('musicBtn');
+            if (musicBtn) musicBtn.addEventListener('click', toggleMusic);
+
+            if (prevBtn) prevBtn.addEventListener('click', preview);
+
+            const celBtn = document.getElementById('celBtn');
+            if (celBtn) celBtn.addEventListener('click', openCandle);
+
+            const btnYes = document.getElementById('btnYes');
+            if (btnYes) btnYes.addEventListener('click', passQuiz);
+
+            const lbX = document.getElementById('lbX');
+            if (lbX) lbX.addEventListener('click', closeLb);
+
+            const lb = document.getElementById('lb');
+            if (lb) {
+                lb.addEventListener('click', function (e) {
+                    if (e.target === this || e.target.id === 'lbX') closeLb();
+                });
+            }
+
+            const prevSlide = document.getElementById('prevSlide');
+            if (prevSlide) prevSlide.addEventListener('click', () => carouselMove(-1));
+
+            const nextSlide = document.getElementById('nextSlide');
+            if (nextSlide) nextSlide.addEventListener('click', () => carouselMove(1));
+
+            const hugBtn = document.getElementById('hugBtn');
+            if (hugBtn) hugBtn.addEventListener('click', doHug);
+
+            const fab = document.getElementById('fab');
+            if (fab) fab.addEventListener('click', launchConfetti);
+
+        })();
     </script>
 </body>
 
