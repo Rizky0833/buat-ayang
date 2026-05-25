@@ -1833,20 +1833,7 @@
                 <div class="letter-deco">♡</div>
                 <div class="letter-body">
                     <span class="letter-opener" id="twEl"></span>
-                    <div id="letterBody" style="opacity:0;transition:opacity .6s ease">
-                        <p>Hari ini, tepat di hari ulang tahunmu, aku pengen kamu tau betapa bersyukurnya aku bisa kenal
-                            kamu. Di antara semua orang di dunia ini, entah gimana kita bisa ketemu dan jadi bagian dari
-                            hidup masing-masing — dan itu adalah hal terbaik yang pernah terjadi padaku 🌷</p>
-                        <p>Jarak memang sering bikin rindu yang nggak ada obatnya. Tapi tau nggak? Setiap kali kamu
-                            muncul di layar HP-ku, setiap suaramu, setiap pesanmu — itu selalu berhasil bikin hariku
-                            jadi lebih baik. Kamu itu somehow udah jadi rumahku, meskipun kita jauh.</p>
-                        <p>Di hari ulang tahunmu ini, aku cuma mau bilang: semoga semua mimpimu pelan-pelan jadi nyata
-                            🌟 Semoga kamu selalu dijaga, selalu sehat, selalu bahagia. Dan semoga kita bisa segera
-                            bareng lagi — karena nggak ada hal yang aku mau lebih dari sekadar duduk di sebelahmu.</p>
-                        <p>Makasih udah jadi kamu. Makasih udah mau ada buat aku. I love you more than any distance
-                            could ever change 💕</p>
-                        <div class="letter-sig">Selalu milikmu, aku ♡</div>
-                    </div>
+                    <div id="letterBody" style="opacity:0;transition:opacity .6s ease"></div>
                 </div>
             </div>
         </div>
@@ -1983,25 +1970,19 @@
                 { src: "Foto/temp_image_EB4BDAD0-4EBA-475D-A0B6-97487333E57C.webp", caption: "Foto Lope Sekebonnya aku 💖" },
             ];
 
-            const REASONS = [
-                { emoji: "🌟", text: "Senyummu yang bisa bikin hari apapun jadi lebih cerah" },
-                { emoji: "💬", text: "Cara kamu dengerin aku — selalu sabar, selalu ada" },
-                { emoji: "😂", text: "Kamu bikin aku ketawa bahkan di hari terburuk sekalipun" },
-                { emoji: "🌙", text: "Good night texts-mu yang selalu bikin aku tidur lebih tenang" },
-                { emoji: "💪", text: "Kamu kuat banget — aku kagum sama semangat kamu" },
-                { emoji: "🎯", text: "Semangat kamu dalam ngejar impian bikin aku ikut termotivasi" },
-                { emoji: "🌸", text: "Cara kamu peduli sama orang-orang di sekitar kamu" },
-                { emoji: "🤝", text: "Kamu selalu jujur sama aku, apapun situasinya" },
-                { emoji: "☀️", text: "Kehadiranmu aja udah cukup bikin hari terasa lebih hangat" },
-                { emoji: "♾️", text: "Dan satu juta alasan lain yang terlalu banyak buat ditulis" },
-            ];
+            // Encrypted Romantic Content (Base64) - Secure from GitHub inspection
+            const L1 = "SGFyaSBpbmksIHRlcGF0IGRpIGhhcmkgdWxhbmcgdGFodW5tdSwgYWt1IHBlbmdlbiBrYW11IHRhdSBiZXRhcGEgYmVyc3l1a3VybnlhIGFrdSBiaXNhIGtlbmFsIGthbXUuIERpIGFudGFyYSBzZW11YSBvcmFuZyBkaSBkdW5pYSBpbmksIGVudGFoIGdpbWFuYSBraXRhIGJpc2Ega2V0ZW11IGRhbiBqYWRpIGJhZ2lhbiBkYXJpIGhpZHVwIG1hc2luZy1tYXNpbmcg4oCUIGRhbiBpdHUgYWRhbGFoIGhhbCB0ZXJiYWlrIHlhbmcgcGVybmFoIHRlcmphZGkgcGFkYWt1IPCfjLc=";
+            const L2 = "SmFyYWsgbWVtYW5nIHNlcmluZyBiaWtpbiByaW5kdSB5YW5nIG5nZ2FrIGFkYSBvYmF0bnlhLiBUYXBpIHRhdSBuZ2dhaz8gU2V0aWFwIGthbGkga2FtdSBtdW5jdWwgZGkgbGF5YXIgSFAta3UsIHNldGlhcCBzdWFyYW11LCBzZXRpYXAgcGVzYW5tdSDigJQgaXR1IHNlbGFsdSBiZXJoYXNpbCBiaWtpbiBoYXJpa3UgamFkaSBsZWJpaCBiYWlrLiBLYW11IGl0dSBzb21laG93IHVkYWggamFkaSBydW1haGt1LCBtZXNraXB1biBraXRhIGphdWgu";
+            const L3 = "RGkgaGFyaSB1bGFuZyB0YWh1bm11IGluaSwgYWt1IGN1bWEgbWF1IGJpbGFuZzogc2Vtb2dhIHNlbXVhIG1pbXBpbXUgcGVsYW4tcGVsYW4gamFkaSBueWF0YSDwn4yfIFNlbW9nYSBrYW11IHNlbGFsdSBkaWphZ2EsIHNlbGFsdSBzZWhhdCwgc2VsYWx1IGJhaGFnaWEuIERhbiBzZW1vZ2Ega2l0YSBiaXNhIHNlZ2VyYSBiYXJlbmcgbGFnaSDigJQga2FyZW5hIG5nZ2FrIGFkYSBoYWwgeWFuZyBha3UgbWF1IGxlYmloIGRhcmkgc2VrYWRhciBkdWR1ayBkaSBzZWJlbGFobXUu";
+            const L4 = "TWFrYXNpaCB1ZGFoIGphZGkga2FtdS4gTWFrYXNpaCB1ZGFoIG1hdSBhZGEgYnVhdCBha3UuIEkgbG92ZSB5b3UgbW9yZSB0aGFuIGFueSBkaXN0YW5jZSBjb3VsZCBldmVyIGNoYW5nZSDwn5KV";
+            const LSIG = "U2VsYWx1IG1pbGlrbXUsIGFrdSDimaE=";
 
-            const TIMELINE = [
-                { date: "Awal mula", emoji: "🎮", title: "Kita pertama ketemu", desc: "Entah gimana caranya, kita bisa saling ketemu di antara jutaan orang di dunia ini dan jutaan player Roblox lainnya... 😆" },
-                { date: "Setelah itu", emoji: "💬", title: "Mulai saling kenal", desc: "Obrolan pertama yang terasa biasa, tapi ternyata jadi awal dari sesuatu yang luar biasa." },
-                { date: "Perlahan", emoji: "💗", title: "Makin dekat", desc: "Tanpa sadar, kamu udah jadi bagian yang paling aku tunggu tiap harinya." },
-                { date: "26 Mei", emoji: "🎂", title: "Hari Ulang Tahunmu", desc: "Dan hari ini, aku cuma mau bilang: makasih udah lahir ke dunia 🌷" },
-            ];
+            const REASONS_B64 = "W3siZW1vamkiOiLwn4yfIiwidGV4dCI6IlNlbnl1bW11IHlhbmcgYmlzYSBiaWtpbiBoYXJpIGFwYXB1biBqYWRpIGxlYmloIGNlcmFoIn0seyJlbW9qaSI6IvCfkqwiLCJ0ZXh0IjoiQ2FyYSBrYW11IGRlbmdlcmluIGFrdSDigJQgc2VsYWx1IHNhYmFyLCBzZWxhbHUgYWRhIn0seyJlbW9qaSI6IvCfmIIiLCJ0ZXh0IjoiS2FtdSBiaWtpbiBha3Uga2V0YXdhIGJhaGthbiBkaSBoYXJpIHRlcmJ1cnVrIHNla2FsaXB1biJ9LHsiZW1vamkiOiLwn4yZIiwidGV4dCI6Ikdvb2QgbmlnaHQgdGV4dHMtbXUgeWFuZyBzZWxhbHUgYmlraW4gYWt1IHRpZHVyIGxlYmloIHRlbmFuZyJ9LHsiZW1vamkiOiLwn5KqIiwidGV4dCI6IkthbXUga3VhdCBiYW5nZXQg4oCUIGFrdSBrYWd1bSBzYW1hIHNlbWFuZ2F0IGthbXUifSx7ImVtb2ppIjoi8J+OryIsInRleHQiOiJTZW1hbmdhdCBrYW11IGRhbGFtIG5nZWphciBpbXBpYW4gYmlraW4gYWt1IGlrdXQgdGVybW90aXZhc2kifSx7ImVtb2ppIjoi8J+MuCIsInRleHQiOiJDYXJhIGthbXUgcGVkdWxpIHNhbWEgb3Jhbmctb3JhbmcgZGkgc2VraXRhciBrYW11In0seyJlbW9qaSI6IvCfpJ0iLCJ0ZXh0IjoiS2FtdSBzZWxhbHUganVqdXIgc2FtYSBha3UsIGFwYXB1biBzaXR1YXNpbnlhIn0seyJlbW9qaSI6IuKYgO+4jyIsInRleHQiOiJLZWhhZGlyYW5tdSBhamEgdWRhaCBjdWt1cCBiaWtpbiBoYXJpIHRlcmFzYSBsZWJpaCBoYW5nYXQifSx7ImVtb2ppIjoi4pm+77iPIiwidGV4dCI6IkRhbiBzYXR1IGp1dGEgYWxhc2FuIGxhaW4geWFuZyB0ZXJsYWx1IGJhbnlhayBidWF0IGRpdHVsaXMifV0=";
+            const TIMELINE_B64 = "W3siZGF0ZSI6IkF3YWwgbXVsYSIsImVtb2ppIjoi8J+OriIsInRpdGxlIjoiS2l0YSBwZXJ0YW1hIGtldGVtdSIsImRlc2MiOiJFbnRhaCBnaW1hbmEgY2FyYW55YSwga2l0YSBiaXNhIHNhbGluZyBrZXRlbXUgZGkgYW50YXJhIGp1dGFhbiBvcmFuZyBkaSBkdW5pYSBpbmkgZGFuIGp1dGFhbiBwbGF5ZXIgUm9ibG94IGxhaW5ueWEuLi4g8J+YhiJ9LHsiZGF0ZSI6IlNldGVsYWggaXR1IiwiZW1vamkiOiLwn5KsIiwidGl0bGUiOiJNdWxhaSBzYWxpbmcga2VuYWwiLCJkZXNjIjoiT2Jyb2xhbiBwZXJ0YW1hIHlhbmcgdGVyYXNhIGJpYXNhLCB0YXBpIHRlcm55YXRhIGphZGkgYXdhbCBkYXJpIHNlc3VhdHUgeWFuZyBsdWFyIGJpYXNhLiJ9LHsiZGF0ZSI6IlBlcmxhaGFuIiwiZW1vamkiOiLwn5KXIiwidGl0bGUiOiJNYWtpbiBkZWthdCIsImRlc2MiOiJUYW5wYSBzYWRhciwga2FtdSB1ZGFoIGphZGkgYmFnaWFuIHlhbmcgcGFsaW5nIGFrdSB0dW5nZ3UgdGlhcCBoYXJpbnlhLiJ9LHsiZGF0ZSI6IjI2IE1laSIsImVtb2ppIjoi8J+OgiIsInRpdGxlIjoiSGFyaSBVbGFuZyBUYWh1bm11IiwiZGVzYyI6IkRhbiBoYXJpIGluaSwgYWt1IGN1bWEgbWF1IGJpbGFuZzogbWFrYXNpaCB1ZGFoIGxhaGlyIGtlIGR1bmlhIPCfjLcifV0=";
+
+            const dec = (s) => decodeURIComponent(escape(atob(s)));
+            const REASONS = JSON.parse(dec(REASONS_B64));
+            const TIMELINE = JSON.parse(dec(TIMELINE_B64));
             /* ============================================================ */
 
             /* ===== ANTI-INSPECT ===== */
@@ -2347,11 +2328,9 @@
                 const bodyEl = document.getElementById('letterBody');
                 if (!openerEl || !bodyEl) return;
                 
-                // Ambil paragraf dan tanda tangan asli dari HTML
-                const paragraphs = Array.from(bodyEl.querySelectorAll('p')).map(p => p.innerHTML);
-                const signature = bodyEl.querySelector('.letter-sig') ? bodyEl.querySelector('.letter-sig').innerHTML : '';
+                const paragraphs = [dec(L1), dec(L2), dec(L3), dec(L4)];
+                const signature = dec(LSIG);
                 
-                // Kosongkan kontainer surat agar bisa diketik satu per satu
                 bodyEl.innerHTML = '';
                 bodyEl.style.opacity = '1';
                 
@@ -2362,15 +2341,14 @@
                 function typeOpenerChar() {
                     if (i >= openerText.length) {
                         openerEl.innerHTML = openerText;
-                        // Setelah opener selesai, mulailah mengetik paragraf demi paragraf
                         setTimeout(() => typeParagraphs(paragraphs, signature, 0), 400);
                         return;
                     }
 
-                    let nextDelay = 65; // Kecepatan dasar mengetik opener
+                    let nextDelay = 65;
                     const charTyped = openerText[i];
                     if (charTyped === ',') {
-                        nextDelay = 400; // Jeda sejenak setelah koma pada sapaan
+                        nextDelay = 400;
                     }
 
                     i++;
