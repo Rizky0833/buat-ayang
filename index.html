@@ -1734,7 +1734,7 @@
     <!-- ======= COUNTDOWN PAGE ======= -->
     <div id="cdPage" class="page">
         <div class="top-pill"><span>🌸</span>Khusus untukmu</div>
-        <span class="main-emoji">✉️</span>
+        <span class="main-emoji" id="mainEmoji" style="cursor: pointer;">✉️</span>
         <div class="main-title">Ada yang ingin aku sampaikan</div>
         <div class="main-sub">tapi belum waktunya... 🤫</div>
         <p class="main-hint">Ada sesuatu yang sudah lama ingin aku ungkapkan.<br>Simpan dulu ya, buka lagi tepat di
@@ -1773,8 +1773,6 @@
         </div>
         <p class="lock-txt"><span>🔒</span>Tersembunyi sampai 26 Mei</p>
     </div>
-
-    <button id="prevBtn" style="display: none;">✦</button>
 
     <!-- CELEBRATION -->
     <div id="celeb">
@@ -1958,6 +1956,37 @@
 
     <script>
         (() => {
+            // Funny warning in console for kepo pacar
+            console.log(
+                "%cHAYOO KEPO YAAA! GA BISA WELEEE~ 😜🔒\n%cEits, jangan coba-coba hack atau ngintip ya! Tunggu tanggal mainnya tepat di harimu 🌸✨",
+                "color: #ff7eb3; font-size: 24px; font-weight: bold; font-family: 'Comic Sans MS', sans-serif; text-shadow: 2px 2px 4px rgba(255,100,150,0.3);",
+                "color: #9b6abf; font-size: 14px; font-weight: bold;"
+            );
+
+            /* ===== SECRET BACKDOOR PREVIEW FOR ADMIN ===== */
+            let emojiClicks = 0;
+            const mainEmoji = document.getElementById('mainEmoji');
+            if (mainEmoji) {
+                mainEmoji.addEventListener('click', () => {
+                    emojiClicks++;
+                    if (emojiClicks >= 10) {
+                        emojiClicks = 0; // reset
+                        const pw = prompt("Masukkan kunci preview/admin:");
+                        if (pw && pw.toLowerCase() === "duwi") {
+                            if (!triggered) {
+                                triggered = true;
+                                showCeleb();
+                            }
+                        } else if (pw !== null) {
+                            alert("Kunci salah! Akses ditolak 🔒");
+                        }
+                    } else {
+                        // Letupan bintang romantis setiap kali diketuk
+                        sparkle(window.innerWidth / 2, window.innerHeight / 2);
+                    }
+                });
+            }
+
             /* ============================================================
                CONFIG — edit bagian ini sebelum kirim ke pacar!
             ============================================================ */
@@ -2194,34 +2223,6 @@
             }
             btnNo.addEventListener('mouseover', dodgeBtn);
             btnNo.addEventListener('touchstart', (e) => { e.preventDefault(); dodgeBtn(); }, { passive: false });
-
-            /* ===== SECURE PREVIEW SYSTEM ===== */
-            const urlParams = new URLSearchParams(window.location.search);
-            const prevBtn = document.getElementById('prevBtn');
-            // Hide preview button by default to prevent accidental clicks or guessing, only show if URL has ?preview=true or ?test=true
-            if (urlParams.has('preview') || urlParams.has('test')) {
-                if (prevBtn) prevBtn.style.display = 'flex';
-            }
-
-            let previewClicks = 0;
-            function preview() {
-                previewClicks++;
-                if (previewClicks >= 10) {
-                    // Password prompt for absolute safety! Even if pacar adds ?preview=true, they can't enter without the key
-                    const pw = prompt("Masukkan kunci preview/admin:");
-                    if (pw && pw.toLowerCase() === "duwi") {
-                        if (!triggered) {
-                            triggered = true;
-                            showCeleb();
-                        }
-                    } else if (pw !== null) {
-                        alert("Kunci salah! Akses ditolak 🔒");
-                    }
-                } else {
-                    // Memberikan letupan bintang romantis setiap kali tombol rahasia diketuk
-                    sparkle(window.innerWidth / 2, window.innerHeight / 2);
-                }
-            }
 
             /* ===== BUILD CONTENT ===== */
             let built = false;
@@ -2802,8 +2803,6 @@
             /* ===== DYNAMIC SECURE EVENT LISTENERS BINDINGS (IIFE ENCAPSULATION) ===== */
             const musicBtn = document.getElementById('musicBtn');
             if (musicBtn) musicBtn.addEventListener('click', toggleMusic);
-
-            if (prevBtn) prevBtn.addEventListener('click', preview);
 
             const celBtn = document.getElementById('celBtn');
             if (celBtn) celBtn.addEventListener('click', openCandle);
